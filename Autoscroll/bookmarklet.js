@@ -1,0 +1,1 @@
+(function(a){if(!a.__ST){a.__ST=setInterval(function(){a.scrollTo(0,a.pageYOffset+1e3)},100);var b=a.onmousewheel;a.onmousewheel=function(c){console.log(c.wheelDeltaY),c.wheelDeltaY>0&&(a.__ST=clearInterval(a.__ST),a.onmousewheel=b),b&&b.call(a,c)}}else clearInterval(a.__ST)})(this)
