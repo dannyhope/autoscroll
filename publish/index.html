@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Publish — Autoscroll</title>
+  <style>
+    :root {
+      --bg: #f4f5f7;
+      --card: #fff;
+      --text: #1a1a1a;
+      --muted: #5f6368;
+      --line: #e3e5e8;
+      --accent: #1a73e8;
+      --accent-hover: #1557b0;
+      --done: #0d7a3f;
+      --done-bg: #e6f4ea;
+      --todo: #b06000;
+      --todo-bg: #fef7e0;
+      --code: #f1f3f4;
+      --skip: #5f6368;
+      --skip-bg: #f1f3f4;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      background: var(--card);
+      border-bottom: 1px solid var(--line);
+      padding: 1.5rem 1.25rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header .inner, main, footer .inner {
+      max-width: 54rem;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+    .tagline { color: var(--muted); margin: 0; font-size: 0.95rem; }
+    header nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    a.btn, button.btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    a.btn.primary, button.btn.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    a.btn.primary:hover, button.btn.primary:hover { background: var(--accent-hover); }
+    a.btn:hover, button.btn:hover { border-color: #c0c4c8; }
+    main { padding: 1.5rem 1.25rem 3rem; }
+    .progress-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      padding: 0.85rem 1rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+    .progress-bar strong { color: var(--text); }
+    .progress-bar .muted { color: var(--muted); }
+    .progress-bar label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      color: var(--muted);
+      user-select: none;
+    }
+    .page-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.875rem;
+    }
+    .page-nav a { color: var(--accent); text-decoration: none; }
+    .page-nav a:hover { text-decoration: underline; }
+    section.card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.25rem 1.35rem;
+      margin-bottom: 1rem;
+    }
+    .step-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .step-head h2,
+    .step-head h3 {
+      margin: 0;
+      flex: 1;
+    }
+    section.card > .step-head h2 {
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .step-head h3 {
+      font-size: 1rem;
+      color: var(--text);
+    }
+    .done-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-shrink: 0;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #fff;
+      white-space: nowrap;
+    }
+    .done-toggle:hover { border-color: var(--done); color: var(--done); }
+    .done-toggle input {
+      width: 1rem;
+      height: 1rem;
+      accent-color: var(--done);
+      cursor: pointer;
+    }
+    .step.is-done { display: none; }
+    body.show-done .step.is-done {
+      display: block;
+      opacity: 0.55;
+      border-style: dashed;
+    }
+    body.show-done section.card.step.is-done { display: block; }
+    .step.substep {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+    }
+    .step.substep:first-of-type { margin-top: 0.75rem; }
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+    }
+    .badge.done { background: var(--done-bg); color: var(--done); }
+    .badge.you { background: var(--todo-bg); color: var(--todo); }
+    .badge.skip { background: var(--skip-bg); color: var(--skip); }
+    .badge.pkg { background: #e8f0fe; color: #174ea6; }
+    p, li { color: var(--muted); }
+    p.lead { color: var(--text); margin-top: 0; }
+    p.form-hint {
+      font-size: 0.85rem;
+      margin: 0 0 0.75rem;
+      color: var(--muted);
+    }
+    .field {
+      margin: 1rem 0;
+      border-top: 1px solid var(--line);
+      padding-top: 1rem;
+    }
+    .field:first-of-type { border-top: 0; padding-top: 0.25rem; }
+    .field-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+    .field-label strong {
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .hint { font-size: 0.8rem; color: var(--muted); }
+    pre.copy-block {
+      margin: 0;
+      padding: 0.85rem 1rem;
+      background: var(--code);
+      border-radius: 8px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 0.85rem;
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      line-height: 1.45;
+    }
+    button.copy {
+      flex-shrink: 0;
+      padding: 0.3rem 0.65rem;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #fff;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    button.copy:hover { border-color: var(--accent); color: var(--accent); }
+    button.copy.copied {
+      background: var(--done-bg);
+      border-color: var(--done);
+      color: var(--done);
+    }
+    .assets {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 0.75rem;
+    }
+    .asset {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fafafa;
+    }
+    .asset img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #eee;
+    }
+    .asset .meta {
+      padding: 0.65rem 0.75rem;
+      font-size: 0.8rem;
+    }
+    .asset .meta strong { display: block; color: var(--text); margin-bottom: 0.15rem; }
+    .asset .meta a { color: var(--accent); }
+    .req { color: #c5221f; font-weight: 600; font-size: 0.75rem; }
+    .opt { color: var(--muted); font-size: 0.75rem; }
+    ol.steps { padding-left: 1.25rem; margin: 0; }
+    ol.steps li { margin: 0.45rem 0; }
+    ul.cat-list {
+      margin: 0.5rem 0 0;
+      padding-left: 1.2rem;
+      font-size: 0.85rem;
+    }
+    ul.cat-list li { margin: 0.2rem 0; }
+    ul.cat-list li.pick { color: var(--text); font-weight: 600; }
+    footer {
+      padding: 1rem 1.25rem 2rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    code { font-size: 0.85em; background: var(--code); padding: 0.1em 0.35em; border-radius: 4px; }
+    .toast {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      background: #202124;
+      color: #fff;
+      padding: 0.65rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 100;
+    }
+    .toast.show { opacity: 1; }
+    .answer-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: baseline;
+      margin: 0.4rem 0;
+      font-size: 0.9rem;
+    }
+    .answer-row .label { color: var(--muted); min-width: 9rem; }
+    .answer-row .value { color: var(--text); font-weight: 500; }
+    .all-done {
+      display: none;
+      text-align: center;
+      padding: 2rem 1rem;
+      background: var(--done-bg);
+      border: 1px solid #b7e1c7;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+    }
+    .all-done.show { display: block; }
+    .all-done strong { color: var(--done); font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="inner">
+      <h1>Publish Autoscroll</h1>
+      <p class="tagline">Mirrors the Chrome Web Store <strong>Store listing</strong> form — tick <strong>Done</strong> on each task to hide it. Defaults: British English, Unlisted.</p>
+      <nav>
+        <a class="btn primary" href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>
+        <a class="btn" href="autoscroll.zip" download>Download zip</a>
+        <a class="btn" href="https://dannyhope.co.uk/autoscroll/" target="_blank" rel="noopener">Privacy / product page</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="progress-bar">
+      <strong id="progress-text">0 / 0 done</strong>
+      <span class="muted" id="progress-remaining"></span>
+      <label>
+        <input type="checkbox" id="show-done">
+        Show completed
+      </label>
+      <button type="button" class="btn" id="reset-done">Reset ticks</button>
+    </div>
+
+    <div class="all-done" id="all-done">
+      <strong>All sections ticked</strong>
+      <p style="margin:0.35rem 0 0;color:var(--done)">Store listing checklist complete — submit when the dashboard is ready.</p>
+    </div>
+
+    <nav class="page-nav" aria-label="Sections">
+      <a href="#product-details">Product details</a>
+      <a href="#graphic-assets">Graphic assets</a>
+      <a href="#additional-fields">Additional fields</a>
+      <a href="#privacy-permissions">Privacy &amp; permissions</a>
+      <a href="#zip">Zip</a>
+    </nav>
+
+    <section class="card" id="howto">
+      <h2>How to use this page <span class="badge you">You</span></h2>
+      <ol class="steps">
+        <li>Host <code>privacy-policy.html</code> at <a href="https://dannyhope.co.uk/autoscroll/" target="_blank" rel="noopener">dannyhope.co.uk/autoscroll/</a> before submitting.</li>
+        <li>Dashboard → upload <a href="autoscroll.zip" download><code>autoscroll.zip</code></a> (if not already).</li>
+        <li>Open <strong>Store listing</strong> → fill each task below; tick <strong>Done</strong> on a task to hide it.</li>
+        <li>Title &amp; summary are <strong>from the package</strong> (manifest).</li>
+        <li>Listing copy uses <strong>British English</strong>. Visibility starts as <strong>Unlisted</strong> (link only).</li>
+        <li>Upload graphics from the download links (24-bit PNG, <strong>no alpha</strong>).</li>
+      </ol>
+    </section>
+
+    <section class="card" id="product-details">
+      <h2>Product details <span class="badge you">Form section</span></h2>
+      <p class="form-hint">For all languages · Focus on explaining what the item does and why users should install it.</p>
+
+      <div class="field step substep" data-step="title" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <div>
+              <strong>Title from package</strong>
+              <span class="badge pkg">From package</span>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">Autoscroll</pre>
+      </div>
+
+      <div class="field step substep" data-step="summary" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <div>
+              <strong>Summary from package</strong>
+              <span class="badge pkg">From package</span>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">Scroll to the bottom of the page. Click the toolbar icon; scroll up to stop.</pre>
+      </div>
+
+      <div class="field step substep" data-step="description" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <div>
+              <strong>Description</strong>
+              <span class="req">Required</span>
+              <span class="hint"> · max 16,000 characters</span>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">Autoscroll scrolls the current page toward the bottom so you can read or scan a long page without holding the wheel.
+
+**How to use it**
+- Click the Autoscroll icon in the toolbar to start
+- Click again to stop
+- Scroll up (mouse wheel or trackpad) to stop
+
+It only affects the tab you click on. There is no popup and no overlay on the page — the page stays as it is.
+
+**Privacy**
+No account required. No analytics. No data sent to the developer. Nothing is stored in Chrome storage.
+
+**Not for**
+Restricted Chrome pages (such as `chrome://` or the Chrome Web Store) cannot be scripted, so the icon does nothing there.</pre>
+      </div>
+
+      <div class="field step substep" data-step="category" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <div>
+              <strong>Category</strong>
+              <span class="req">Required</span>
+              <span class="hint"> · Productivity is a <em>group</em>, not a choice</span>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">Tools</pre>
+        <p class="hint" style="margin:0.5rem 0 0">
+          In the dropdown, open the <strong>Productivity</strong> group, then pick a leaf category:
+        </p>
+        <ul class="cat-list">
+          <li>Education</li>
+          <li>Functionality &amp; UI</li>
+          <li>Household</li>
+          <li>Privacy &amp; Security</li>
+          <li class="pick">Tools ← choose this</li>
+          <li>Workflow &amp; Planning</li>
+        </ul>
+      </div>
+
+      <div class="field step substep" data-step="language" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <div>
+              <strong>Language</strong>
+              <span class="req">Required</span>
+              <span class="hint"> · British English</span>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">English (United Kingdom)</pre>
+        <p class="hint" style="margin:0.5rem 0 0">
+          Prefer <strong>English (United Kingdom)</strong> if listed. Otherwise choose <strong>English</strong> — listing copy stays British.
+        </p>
+      </div>
+    </section>
+
+    <section class="card" id="graphic-assets">
+      <h2>Graphic assets <span class="badge you">Form section</span></h2>
+      <p class="form-hint">JPEG or <strong>24-bit PNG (no alpha)</strong>. Tick each upload as you finish it.</p>
+
+      <div class="step substep" data-step="store-icon">
+        <div class="step-head">
+          <h3>Store icon <span class="req">Required</span></h3>
+          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+        </div>
+        <p class="form-hint">128 × 128 · Drop icon here</p>
+        <div class="assets">
+          <div class="asset">
+            <img src="icon-128.png" width="128" height="128" alt="Store icon 128×128">
+            <div class="meta">
+              <strong>icon-128.png</strong>
+              128×128 · 24-bit PNG · no alpha<br>
+              <a href="icon-128.png" download>Download</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step substep" data-step="promo-video">
+        <div class="step-head">
+          <h3>Global promo video <span class="badge skip">Skip</span></h3>
+          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+        </div>
+        <p class="form-hint">YouTube URL · optional · leave blank.</p>
+      </div>
+
+      <div class="step substep" data-step="screenshots">
+        <div class="step-head">
+          <h3>Screenshots <span class="req">At least one required</span></h3>
+          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+        </div>
+        <p class="form-hint">Up to 5 · 1,280 × 800 or 640 × 400 · JPEG or 24-bit PNG (no alpha)</p>
+        <div class="assets">
+          <div class="asset">
+            <img src="screenshot.png" alt="Primary screenshot">
+            <div class="meta">
+              <strong>1 — Primary</strong>
+              Long page + toolbar icon · 1280×800<br>
+              <a href="screenshot.png" download>Download screenshot.png</a>
+            </div>
+          </div>
+          <div class="asset">
+            <img src="screenshot-further.png" alt="Further down the page">
+            <div class="meta">
+              <strong>2 — Further down</strong>
+              Same page, further on · 1280×800<br>
+              <a href="screenshot-further.png" download>Download screenshot-further.png</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step substep" data-step="small-promo">
+        <div class="step-head">
+          <h3>Small promo tile <span class="opt">Recommended</span></h3>
+          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+        </div>
+        <p class="form-hint">440 × 280 · JPEG or 24-bit PNG (no alpha)</p>
+        <div class="assets">
+          <div class="asset">
+            <img src="promo-tile-440x280.png" alt="Small promo tile">
+            <div class="meta">
+              <strong>promo-tile-440x280.png</strong>
+              <a href="promo-tile-440x280.png" download>Download</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step substep" data-step="marquee-promo">
+        <div class="step-head">
+          <h3>Marquee promo tile <span class="opt">Optional</span></h3>
+          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+        </div>
+        <p class="form-hint">1400 × 560 · JPEG or 24-bit PNG (no alpha)</p>
+        <div class="assets">
+          <div class="asset">
+            <img src="marquee-promo-tile-1400x560.png" alt="Marquee promo tile">
+            <div class="meta">
+              <strong>marquee-promo-tile-1400x560.png</strong>
+              <a href="marquee-promo-tile-1400x560.png" download>Download</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="additional-fields">
+      <h2>Additional fields <span class="badge you">Form section</span></h2>
+
+      <div class="step substep" data-step="official-url">
+        <div class="step-head">
+          <h3>Official URL</h3>
+          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+        </div>
+        <p class="form-hint">Select from verified sites, or leave <strong>None</strong>.</p>
+        <div class="answer-row">
+          <span class="label">Suggested</span>
+          <span class="value">None — or dannyhope.co.uk if listed</span>
+        </div>
+      </div>
+
+      <div class="step substep" data-step="homepage-url" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <div>
+              <strong>Homepage URL</strong>
+              <span class="hint"> · max 2,048</span>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">https://dannyhope.co.uk</pre>
+      </div>
+
+      <div class="step substep" data-step="support-url" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <div>
+              <strong>Support URL</strong>
+              <span class="hint"> · max 2,048</span>
+            </div>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">mailto:danny.hope@gmail.com</pre>
+      </div>
+
+      <div class="step substep" data-step="mature">
+        <div class="step-head">
+          <h3>Mature content</h3>
+          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+        </div>
+        <div class="answer-row">
+          <span class="label">Answer</span>
+          <span class="value">No</span>
+        </div>
+      </div>
+
+      <div class="step substep" data-step="visibility">
+        <div class="step-head">
+          <h3>Item support / Visibility</h3>
+          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+        </div>
+        <div class="answer-row">
+          <span class="label">Visibility</span>
+          <span class="value">Unlisted</span>
+        </div>
+        <p class="hint" style="margin:0.35rem 0 0.5rem">
+          Start <strong>Unlisted</strong> so people only reach it via the link. Switch to Public later if you want store search.
+        </p>
+        <div class="answer-row">
+          <span class="label">Item support</span>
+          <span class="value">On</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="privacy-permissions">
+      <h2>Privacy &amp; permissions <span class="badge you">Other tabs</span></h2>
+      <p class="lead">Not on Store listing — use when the dashboard asks.</p>
+
+      <div class="field step substep" data-step="privacy-url" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <strong>Privacy policy URL</strong>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">https://dannyhope.co.uk/autoscroll/</pre>
+      </div>
+
+      <div class="field step substep" data-step="single-purpose" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <strong>Single purpose</strong>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">Scroll the current web page toward the bottom when the user clicks the toolbar icon.</pre>
+      </div>
+
+      <div class="field step substep" data-step="perm-activetab" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <strong>activeTab — justification</strong>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">Used only when you click the toolbar icon, so the extension can run on that one tab. It does not have standing access to other tabs or your browsing history.</pre>
+      </div>
+
+      <div class="field step substep" data-step="perm-scripting" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <strong>scripting — justification</strong>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">Injects the scroller script into the tab you just clicked so the page can move toward the bottom. The script does not send page content to the developer.</pre>
+      </div>
+
+      <div class="field step substep" data-step="perm-removed" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <strong>tabs / host permissions — not requested</strong>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">The Manifest V2 listing asked for tabs plus http://*/* and https://*/*. The MV3 package does not request those. A toolbar click (activeTab) is enough.</pre>
+      </div>
+
+      <div class="field step substep" data-step="privacy-qa" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <strong>Privacy questionnaire</strong>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">Collect personal data? No (developer does not collect)
+Data used for: Functionality only (scrolling the current tab in the browser)
+Data sold? No
+Privacy policy URL: https://dannyhope.co.uk/autoscroll/</pre>
+      </div>
+
+      <div class="field step substep" data-step="support-email" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <strong>Support email</strong>
+            <div style="display:flex;gap:0.5rem;align-items:center">
+              <button type="button" class="copy">Copy</button>
+              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+            </div>
+          </div>
+        </div>
+        <pre class="copy-block">danny.hope@gmail.com</pre>
+      </div>
+    </section>
+
+    <section class="card" id="zip">
+      <h2>Package zip</h2>
+      <div class="step substep" data-step="zip-upload">
+        <div class="step-head">
+          <h3>Upload package</h3>
+          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+        </div>
+        <p class="lead">Upload if you haven’t already (or after any code change).</p>
+        <p><a class="btn primary" href="autoscroll.zip" download>Download autoscroll.zip</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="inner">
+      Category: Productivity group → <strong>Tools</strong>.
+      Defaults: British English · Unlisted (link only).
+      Done ticks are on tasks only; saved in this browser.
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status">Copied</div>
+
+  <script>
+    const STORAGE_KEY = 'autoscroll-publish-done-v1';
+    const toast = document.getElementById('toast');
+    let toastTimer;
+
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1400);
+    }
+
+    function loadDone() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      } catch {
+        return {};
+      }
+    }
+
+    function saveDone(map) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
+    }
+
+    function updateProgress() {
+      const steps = [...document.querySelectorAll('.step[data-step]')];
+      const total = steps.length;
+      const done = steps.filter((s) => s.classList.contains('is-done')).length;
+      document.getElementById('progress-text').textContent = `${done} / ${total} done`;
+      document.getElementById('progress-remaining').textContent =
+        done === total ? '' : `${total - done} remaining`;
+      document.getElementById('all-done').classList.toggle('show', done === total && total > 0);
+    }
+
+    function applyDoneState() {
+      const map = loadDone();
+      document.querySelectorAll('.step[data-step]').forEach((step) => {
+        const id = step.dataset.step;
+        const checked = !!map[id];
+        step.classList.toggle('is-done', checked);
+        const own = step.querySelector(':scope > .step-head input[data-done]');
+        if (own) own.checked = checked;
+      });
+      updateProgress();
+    }
+
+    document.querySelectorAll('.step[data-step]').forEach((step) => {
+      const input = step.querySelector(':scope > .step-head input[data-done]');
+      if (!input) return;
+      input.addEventListener('change', () => {
+        const map = loadDone();
+        if (input.checked) map[step.dataset.step] = true;
+        else delete map[step.dataset.step];
+        saveDone(map);
+        step.classList.toggle('is-done', input.checked);
+        updateProgress();
+        if (input.checked) showToast('Hidden — tick “Show completed” to bring back');
+      });
+    });
+
+    document.getElementById('show-done').addEventListener('change', (e) => {
+      document.body.classList.toggle('show-done', e.target.checked);
+    });
+
+    document.getElementById('reset-done').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+      applyDoneState();
+      showToast('All ticks cleared');
+    });
+
+    document.querySelectorAll('[data-copy]').forEach((field) => {
+      const btn = field.querySelector('button.copy');
+      const block = field.querySelector('.copy-block');
+      if (!btn || !block) return;
+      btn.addEventListener('click', async () => {
+        const text = block.textContent;
+        if (!text.trim()) {
+          showToast('Nothing to copy — leave this field blank');
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.classList.add('copied');
+          btn.textContent = 'Copied';
+          showToast('Copied to clipboard');
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.textContent = 'Copy';
+          }, 1500);
+        } catch {
+          showToast('Copy failed — select the text manually');
+        }
+      });
+    });
+
+    applyDoneState();
+  </script>
+</body>
+</html>

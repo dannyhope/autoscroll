@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+	<meta charset="utf-8">
+	<title>Autoscroll screenshot 2</title>
+	<style>
+		* { box-sizing: border-box; }
+		html, body { margin: 0; height: 100%; background: #3c4043; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+		.chrome {
+			height: 72px;
+			background: #202124;
+			color: #e8eaed;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			padding: 0 12px;
+			border-bottom: 1px solid #3c4043;
+		}
+		.dots { display: flex; gap: 6px; padding: 0 4px; }
+		.dots i { width: 10px; height: 10px; border-radius: 50%; display: block; background: #5f6368; }
+		.omnibox {
+			flex: 1;
+			height: 32px;
+			border-radius: 16px;
+			background: #303134;
+			color: #9aa0a6;
+			display: flex;
+			align-items: center;
+			padding: 0 14px;
+			font-size: 13px;
+		}
+		.ext {
+			width: 40px;
+			height: 40px;
+			border-radius: 8px;
+			background: #000;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			outline: 2px solid #8ab4f8;
+			outline-offset: 2px;
+		}
+		.ext img { width: 32px; height: 32px; }
+		.page {
+			height: calc(100% - 72px);
+			background: #f8f6f1;
+			color: #1a1a1a;
+			overflow: hidden;
+			padding: 28px 72px 40px;
+		}
+		.kicker { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #6b6358; margin: 0 0 8px; }
+		h1 { font-size: 28px; font-weight: 650; margin: 0 0 16px; letter-spacing: -0.02em; }
+		p { font-size: 17px; line-height: 1.55; max-width: 42rem; margin: 0 0 1rem; }
+		.faded { color: #6b6358; font-size: 14px; margin-bottom: 20px; }
+	</style>
+</head>
+<body>
+	<div class="chrome">
+		<div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+		<div class="omnibox">example.com/south-downs-walk</div>
+		<div class="ext" title="Autoscroll">
+			<img src="../../Autoscroll/icon-128.png" alt="Autoscroll">
+		</div>
+	</div>
+	<div class="page">
+		<p class="faded">…continued from earlier on the page</p>
+		<p class="kicker">Further down</p>
+		<h1>The last few miles, without holding the wheel</h1>
+		<p>By this point in a long article the hand has done enough. Autoscroll keeps walking the page for you: a thousand pixels at a time, until you scroll up or click the icon again.</p>
+		<p>There is no overlay on the article. The page stays the page. The only chrome is the toolbar button you already clicked.</p>
+		<p>Steep bit into Alfriston. A pub you will not go into because the notes are not finished. Then the river, then the car park, then the sentence that finally lets you stop.</p>
+		<p>That is the behaviour: start on click, stop on scroll-up, nothing stored, nothing sent.</p>
+	</div>
+</body>
+</html>

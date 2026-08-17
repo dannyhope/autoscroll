@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+	<meta charset="utf-8">
+	<title>Autoscroll screenshot</title>
+	<style>
+		* { box-sizing: border-box; }
+		html, body { margin: 0; height: 100%; background: #3c4043; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+		.chrome {
+			height: 72px;
+			background: #202124;
+			color: #e8eaed;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			padding: 0 12px;
+			border-bottom: 1px solid #3c4043;
+		}
+		.dots { display: flex; gap: 6px; padding: 0 4px; }
+		.dots i { width: 10px; height: 10px; border-radius: 50%; display: block; background: #5f6368; }
+		.omnibox {
+			flex: 1;
+			height: 32px;
+			border-radius: 16px;
+			background: #303134;
+			color: #9aa0a6;
+			display: flex;
+			align-items: center;
+			padding: 0 14px;
+			font-size: 13px;
+		}
+		.ext {
+			width: 40px;
+			height: 40px;
+			border-radius: 8px;
+			background: #000;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			outline: 2px solid #8ab4f8;
+			outline-offset: 2px;
+		}
+		.ext img { width: 32px; height: 32px; }
+		.page {
+			height: calc(100% - 72px);
+			background: #f8f6f1;
+			color: #1a1a1a;
+			overflow: hidden;
+			padding: 28px 72px 40px;
+		}
+		.kicker { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #6b6358; margin: 0 0 8px; }
+		h1 { font-size: 32px; font-weight: 650; margin: 0 0 8px; letter-spacing: -0.02em; }
+		.meta { font-size: 13px; color: #6b6358; margin: 0 0 24px; }
+		p { font-size: 17px; line-height: 1.55; max-width: 42rem; margin: 0 0 1rem; }
+		.hint {
+			position: absolute;
+			right: 28px;
+			bottom: 22px;
+			font-size: 12px;
+			color: #5f6368;
+			background: #fff;
+			border: 1px solid #dadce0;
+			border-radius: 8px;
+			padding: 8px 10px;
+		}
+		.hint strong { color: #202124; }
+	</style>
+</head>
+<body>
+	<div class="chrome">
+		<div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+		<div class="omnibox">example.com/south-downs-walk</div>
+		<div class="ext" title="Autoscroll">
+			<img src="../../Autoscroll/icon-128.png" alt="Autoscroll">
+		</div>
+	</div>
+	<div class="page">
+		<p class="kicker">A long page</p>
+		<h1>Walking the South Downs in one sitting</h1>
+		<p class="meta">A long read — click Autoscroll in the toolbar to move toward the bottom</p>
+		<p>The path keeps offering the same bargain: one more ridge, then tea. You decline, of course, and take the ridge. The villages sit in the folds like commas, and the sky does that pale southern English thing of never quite committing to weather.</p>
+		<p>You could scroll this by hand. That is the whole joke of a page like this — it goes on, on purpose, because the walk went on. Autoscroll is for the stretch where your tea is cooling and you would rather not hold the wheel.</p>
+		<p>Click the highlighted toolbar icon to start. Scroll up when you want the page back. Click again if you would rather stop without touching the wheel.</p>
+		<p>Dew on the grass. A kite over the scarp. Someone’s dog with opinions about sheep. The notes continue below the fold, which is the point.</p>
+		<p>Later, when the light goes the colour of weak tea, you will want the end of the article without the ritual of tiny flicks. That is all this extension does. It does not decorate the page. It does not ask for an account.</p>
+	</div>
+	<div class="hint"><strong>Autoscroll</strong> — toolbar icon (outlined)</div>
+</body>
+</html>
