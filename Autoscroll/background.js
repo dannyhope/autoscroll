@@ -1,3 +1,11 @@
-chrome.browserAction.onClicked.addListener(function(tab) {
-    chrome.tabs.executeScript(tab.id, {file: "bookmarklet.js"})
+chrome.action.onClicked.addListener((tab) => {
+	if (!tab.id) return;
+	chrome.scripting
+		.executeScript({
+			target: { tabId: tab.id },
+			files: ["bookmarklet.js"],
+		})
+		.catch(() => {
+			// Restricted pages (chrome://, Web Store, and similar) cannot be scripted.
+		});
 });

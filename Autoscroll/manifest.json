@@ -1,21 +1,28 @@
 {
- "background": {"scripts": ["background.js"]},
- "browser_action": {
- "default_icon": "icon-128.png",
- "default_title": "Autoscroll"
- },
- "name": "Autoscroll",
- "description": "Scroll to the bottom of the page - Created with http://blog.self.li",
- "homepage_url": "http://blog.self.li/post/16366939413/how-to-convert-bookmarklet-to-chrome-extension",
- "icons": {
-     "16": "icon-16.png",
-     "48": "icon-48.png",
-     "128": "icon-128.png" },
- "permissions": [
-     "tabs",
-     "http://*/*",
-     "https://*/*"
- ],
- "version": "0.1",
- "manifest_version": 2
+	"manifest_version": 3,
+	"name": "Autoscroll",
+	"description": "Scroll to the bottom of the page. Click the toolbar icon; scroll up to stop.",
+	"version": "0.2",
+	"author": "Danny Hope",
+	"homepage_url": "https://dannyhope.co.uk",
+	"action": {
+		"default_title": "Autoscroll",
+		"default_icon": {
+			"16": "icon-16.png",
+			"48": "icon-48.png",
+			"128": "icon-128.png"
+		}
+	},
+	"background": {
+		"service_worker": "background.js"
+	},
+	"icons": {
+		"16": "icon-16.png",
+		"48": "icon-48.png",
+		"128": "icon-128.png"
+	},
+	"permissions": [
+		"activeTab",
+		"scripting"
+	]
 }
