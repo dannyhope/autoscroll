@@ -53,7 +53,7 @@ English (United Kingdom) — British English spelling in all listing copy. If th
 |-------|--------|
 | Official URL | None (or dannyhope.co.uk if verified in Search Console) |
 | Homepage URL | https://dannyhope.co.uk |
-| Support URL | mailto:danny.hope@gmail.com |
+| Support URL | https://dannyhope.co.uk/feedback |
 | Mature content | No |
 | Visibility | **Unlisted** (link only — not Public until you choose) |
 | Item support | On |
@@ -79,7 +79,7 @@ Injects the scroller script into the tab you just clicked so the page can move t
 - **Data sold?** No
 - **Privacy policy URL:** https://dannyhope.co.uk/autoscroll/
 
-Host `privacy-policy.html` at that URL before submitting (copy the in-repo file).
+Host `privacy-policy.html` at that URL before submitting (copy the in-repo file to `dannyhope.co.uk/autoscroll/index.html`; not live until that site is deployed).
 
 ## Support email
 danny.hope@gmail.com

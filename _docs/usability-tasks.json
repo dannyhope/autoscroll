@@ -1,0 +1,17 @@
+[
+	{
+		"id": "task-1",
+		"instruction": "Find where you would change your settings.",
+		"context": "Starting from the home screen"
+	},
+	{
+		"id": "task-2",
+		"instruction": "What do you think will happen if you click the primary action button?",
+		"context": null
+	},
+	{
+		"id": "task-3",
+		"instruction": "How would you share this page with a colleague?",
+		"context": null
+	}
+]

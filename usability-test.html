@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Usability Test</title>
+	<style>
+		* { box-sizing: border-box; }
+		body {
+			font-family: system-ui, -apple-system, sans-serif;
+			max-width: 600px;
+			margin: 2rem auto;
+			padding: 1rem;
+			line-height: 1.5;
+		}
+		.task-instruction {
+			font-size: 1.5rem;
+			font-weight: 600;
+			margin-bottom: 0.5rem;
+		}
+		.task-context {
+			color: #666;
+			margin-bottom: 1.5rem;
+		}
+		.task-number {
+			color: #999;
+			font-size: 0.875rem;
+			margin-bottom: 0.5rem;
+		}
+		textarea {
+			width: 100%;
+			min-height: 120px;
+			padding: 0.75rem;
+			font-size: 1rem;
+			font-family: inherit;
+			border: 2px solid #ddd;
+			border-radius: 6px;
+			resize: vertical;
+		}
+		textarea:focus {
+			outline: none;
+			border-color: #0066cc;
+		}
+		.actions {
+			margin-top: 1rem;
+			display: flex;
+			gap: 0.5rem;
+		}
+		button {
+			padding: 0.75rem 1.5rem;
+			font-size: 1rem;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+		}
+		button:focus {
+			outline: 2px solid #0066cc;
+			outline-offset: 2px;
+		}
+		.btn-primary {
+			background: #0066cc;
+			color: white;
+		}
+		.btn-primary:hover { background: #0055aa; }
+		.btn-secondary {
+			background: #eee;
+			color: #333;
+		}
+		.btn-secondary:hover { background: #ddd; }
+		.complete {
+			text-align: center;
+			padding: 2rem;
+		}
+		.complete h2 {
+			color: #22863a;
+		}
+		.response-count {
+			color: #666;
+			font-size: 0.875rem;
+			margin-top: 1rem;
+		}
+		.setup {
+			background: #f5f5f5;
+			padding: 1.5rem;
+			border-radius: 8px;
+		}
+		.setup input {
+			width: 100%;
+			padding: 0.75rem;
+			font-size: 1rem;
+			border: 2px solid #ddd;
+			border-radius: 6px;
+			margin-bottom: 1rem;
+		}
+		.setup input:focus {
+			outline: none;
+			border-color: #0066cc;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<div id="setup" class="setup">
+			<h1>Usability Test</h1>
+			<p>Enter participant ID to begin:</p>
+			<input type="text" id="participant-id" autofocus>
+			<p style="font-size: 0.875rem; color: #666;">e.g. P01, P02</p>
+			<button class="btn-primary" onclick="startTest()">Start</button>
+		</div>
+
+		<div id="task-view" style="display: none;">
+			<div class="task-number" id="task-number"></div>
+			<div class="task-instruction" id="task-instruction"></div>
+			<div class="task-context" id="task-context"></div>
+			<label for="response" style="display:block; font-size: 0.875rem; color: #666; margin-bottom: 0.25rem;">Observer notes</label>
+			<textarea id="response"></textarea>
+			<div class="actions">
+				<button class="btn-primary" onclick="submitResponse()" title="Next task (Cmd+Enter)">Next</button>
+				<button class="btn-secondary" onclick="skipTask()" title="Skip this task">Skip</button>
+			</div>
+			<div class="response-count" id="response-count"></div>
+		</div>
+
+		<div id="complete" class="complete" style="display: none;">
+			<h2>Test complete</h2>
+			<p>Thank you for participating.</p>
+			<div class="actions" style="justify-content: center;">
+				<button class="btn-primary" onclick="downloadResults()">Download results</button>
+				<button class="btn-secondary" onclick="copyResults()">Copy to clipboard</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		let tasks = [];
+		let currentTaskIndex = 0;
+		let responses = [];
+		let participantId = '';
+		let sessionId = '';
+
+		async function loadTasks() {
+			try {
+				const response = await fetch('_docs/usability-tasks.json');
+				if (response.ok) {
+					tasks = await response.json();
+					return;
+				}
+			} catch (e) {
+				// fetch failed — try relative path variants
+			}
+			// Fallback: embedded tasks (replaced during init if needed)
+			tasks = [
+				{ id: 'fallback-1', instruction: 'Could not load tasks. Ensure _docs/usability-tasks.json is served.', context: 'The test runner needs a server to load tasks via fetch. Try: npx serve .' }
+			];
+		}
+
+		function startTest() {
+			participantId = document.getElementById('participant-id').value.trim() || 'anonymous';
+			sessionId = new Date().toISOString().replace(/[:.]/g, '-');
+			document.getElementById('setup').style.display = 'none';
+			document.getElementById('task-view').style.display = 'block';
+			showCurrentTask();
+		}
+
+		function showCurrentTask() {
+			if (currentTaskIndex >= tasks.length) {
+				showComplete();
+				return;
+			}
+			const task = tasks[currentTaskIndex];
+			document.getElementById('task-number').textContent = `Task ${currentTaskIndex + 1} of ${tasks.length}`;
+			document.getElementById('task-instruction').textContent = task.instruction;
+			document.getElementById('task-context').textContent = task.context || '';
+			document.getElementById('response').value = '';
+			document.getElementById('response').focus();
+			updateResponseCount();
+		}
+
+		function submitResponse() {
+			const task = tasks[currentTaskIndex];
+			const responseText = document.getElementById('response').value.trim();
+			responses.push({
+				timestamp: new Date().toISOString(),
+				participantId,
+				sessionId,
+				taskId: task.id,
+				instruction: task.instruction,
+				response: responseText,
+				skipped: false
+			});
+			currentTaskIndex++;
+			showCurrentTask();
+		}
+
+		function skipTask() {
+			const task = tasks[currentTaskIndex];
+			responses.push({
+				timestamp: new Date().toISOString(),
+				participantId,
+				sessionId,
+				taskId: task.id,
+				instruction: task.instruction,
+				response: null,
+				skipped: true
+			});
+			currentTaskIndex++;
+			showCurrentTask();
+		}
+
+		function showComplete() {
+			document.getElementById('task-view').style.display = 'none';
+			document.getElementById('complete').style.display = 'block';
+		}
+
+		function getResultsAsJsonLines() {
+			return responses.map(r => JSON.stringify(r)).join('\n');
+		}
+
+		function downloadResults() {
+			const data = getResultsAsJsonLines();
+			const blob = new Blob([data], { type: 'application/jsonl' });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `usability-results-${participantId}-${sessionId}.jsonl`;
+			a.click();
+			URL.revokeObjectURL(url);
+		}
+
+		function copyResults() {
+			navigator.clipboard.writeText(getResultsAsJsonLines()).then(() => {
+				const btn = event.target;
+				const original = btn.textContent;
+				btn.textContent = 'Copied!';
+				setTimeout(() => btn.textContent = original, 2000);
+			});
+		}
+
+		function updateResponseCount() {
+			const count = responses.length;
+			document.getElementById('response-count').textContent =
+				count > 0 ? `${count} response${count === 1 ? '' : 's'} recorded` : '';
+		}
+
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+				const taskView = document.getElementById('task-view');
+				if (taskView.style.display !== 'none') {
+					submitResponse();
+				}
+			}
+		});
+
+		loadTasks();
+	</script>
+</body>
+</html>

@@ -27,17 +27,17 @@ Open [`publish/index.html`](publish/index.html) in a browser — checklist, copy
 
 - [`_docs/spec.md`](_docs/spec.md) — how it should work
 - [`_docs/design.md`](_docs/design.md) — how it should look
-- [`privacy-policy.html`](privacy-policy.html) — for store hosting
+- [`privacy-policy.html`](privacy-policy.html) — for store hosting (public: https://dannyhope.co.uk/autoscroll/)
 
 ## Acknowledgements
 
 Thanks @rem for the original script which was used to make a bookmarklet which was used to make the browser extension.
 
-Thanks to Peter Legierski for the [Convert bookmarklet to Chrome extension tool](http://sandbox.self.li/bookmarklet-to-extension/).
+Thanks to Peter Legierski for the [Convert bookmarklet to Chrome extension tool](https://dannyhope.co.uk/bookmarklet-to-extension).
 
 ## Feedback
 
-[danny.hope@gmail.com](mailto:danny.hope@gmail.com)
+[Feedback](https://dannyhope.co.uk/feedback)
 
 ---
 

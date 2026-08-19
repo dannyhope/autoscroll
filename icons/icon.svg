@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+	<!-- Mid-grey glyph, ~12% inset, two downward arrows. Colour: brand #7B858A. -->
+	<g fill="#7B858A">
+		<polygon points="18,34 58,34 38,98"/>
+		<polygon points="70,34 110,34 90,98"/>
+	</g>
+</svg>
