@@ -17,7 +17,6 @@ None — clean bill of health.
 ## Already right
 
 - Public feedback hrefs (README, privacy policy, store Support URL) go via https://dannyhope.co.uk/feedback
-- Bookmarklet-converter acknowledgement goes via https://dannyhope.co.uk/bookmarklet-to-extension
 - `.in/` inbox exists
 - `.gitignore` includes `_vibing/` and `.DS_Store`
 - `_vibing/` exists (git-ignored)

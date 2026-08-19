@@ -33,7 +33,7 @@ Open [`publish/index.html`](publish/index.html) in a browser — checklist, copy
 
 Thanks @rem for the original script which was used to make a bookmarklet which was used to make the browser extension.
 
-Thanks to Peter Legierski for the [Convert bookmarklet to Chrome extension tool](https://dannyhope.co.uk/bookmarklet-to-extension).
+Thanks to Peter Legierski for the [Convert bookmarklet to Chrome extension tool](http://sandbox.self.li/bookmarklet-to-extension/).
 
 ## Feedback
 
