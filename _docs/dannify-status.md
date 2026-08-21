@@ -8,7 +8,7 @@
 >
 > **Surfaces:** toolbar button + injected page scroller. No popup, options, or side panel.
 >
-> **Store:** previously listed as Chrome Web Store id `kgkaecolmndcecnchojbndeanmiokofl` (2014; store page now looks unpublished). Manifest is **MV3**.
+> **Store:** Chrome Web Store id `kgkaecolmndcecnchojbndeanmiokofl` (2014). Local package is **MV3** (version 0.3). If Chrome emailed “update to Manifest V3”, the dashboard item is still V2 until this zip is uploaded (store removes remaining MV2 listings on 31 August 2026).
 
 ## Improvements
 
@@ -16,7 +16,8 @@ None — clean bill of health.
 
 ## Already right
 
-- Public feedback hrefs (README, privacy policy, store Support URL) go via https://dannyhope.co.uk/feedback
+- Public feedback hrefs (README, privacy policy) go via https://dannyhope.co.uk/feedback
+- Store Support URL is the Autoscroll page: https://dannyhope.co.uk/autoscroll/
 - `.in/` inbox exists
 - `.gitignore` includes `_vibing/` and `.DS_Store`
 - `_vibing/` exists (git-ignored)

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Publish — Autoscroll</title>
+  <title>Publish Autoscroll to Chrome Web Store</title>
   <style>
     :root {
       --bg: #f4f5f7;
@@ -20,6 +20,8 @@
       --code: #f1f3f4;
       --skip: #5f6368;
       --skip-bg: #f1f3f4;
+      --alert: #c5221f;
+      --alert-bg: #fce8e6;
     }
     * { box-sizing: border-box; }
     body {
@@ -30,24 +32,20 @@
       line-height: 1.5;
     }
     header {
-      background: var(--card);
-      border-bottom: 1px solid var(--line);
-      padding: 1.5rem 1.25rem;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      background: transparent;
+      border: 0;
+      padding: 1.5rem 1.25rem 0.75rem;
     }
-    header .inner, main, footer .inner {
+    header .inner, footer .inner {
       max-width: 54rem;
       margin: 0 auto;
     }
-    h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
-    .tagline { color: var(--muted); margin: 0; font-size: 0.95rem; }
-    header nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1rem;
+    h1 {
+      font-size: 1.35rem;
+      margin: 0;
+      line-height: 1.3;
+      color: var(--text);
+      font-weight: 600;
     }
     a.btn, button.btn {
       display: inline-flex;
@@ -70,104 +68,154 @@
     }
     a.btn.primary:hover, button.btn.primary:hover { background: var(--accent-hover); }
     a.btn:hover, button.btn:hover { border-color: #c0c4c8; }
-    main { padding: 1.5rem 1.25rem 3rem; }
-    .progress-bar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.75rem 1rem;
+    .privacy-alert {
+      display: none;
       margin-bottom: 1.25rem;
-      padding: 0.85rem 1rem;
-      background: var(--card);
-      border: 1px solid var(--line);
+      padding: 0.9rem 1rem;
+      background: var(--alert-bg);
+      border: 1px solid #f5c2c0;
       border-radius: 10px;
+      color: var(--alert);
       font-size: 0.9rem;
     }
-    .progress-bar strong { color: var(--text); }
-    .progress-bar .muted { color: var(--muted); }
-    .progress-bar label {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      cursor: pointer;
-      color: var(--muted);
-      user-select: none;
+    .privacy-alert.show { display: block; }
+    .privacy-alert strong { display: block; margin-bottom: 0.25rem; }
+    .privacy-alert a { color: var(--alert); font-weight: 600; }
+    header .inner, footer .inner, main {
+      max-width: 54rem;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .page-nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem 1rem;
-      margin-bottom: 1.25rem;
-      font-size: 0.875rem;
+    main {
+      max-width: calc(54rem + 2.5rem);
+      padding: 0 1.25rem 2rem;
+      min-width: 0;
+      background: transparent;
+      border: 0;
+      margin: 1rem auto 2rem;
     }
-    .page-nav a { color: var(--accent); text-decoration: none; }
-    .page-nav a:hover { text-decoration: underline; }
-    section.card {
+    .panel {
       background: var(--card);
-      border: 1px solid var(--line);
       border-radius: 12px;
-      padding: 1.25rem 1.35rem;
-      margin-bottom: 1rem;
+      border: 1px solid var(--line);
+      padding: 1.5rem 1.5rem 1.75rem;
+      margin: 0 0 1rem;
+    }
+    .panel > h2 {
+      margin: 0 0 1rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .panel > section.card:last-child {
+      margin-bottom: 0;
+    }
+    .where {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 0.65rem;
+    }
+    .where a { color: var(--accent); }
+    /* Listing sections are headings + tasks — not nested white cards */
+    section.card {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      padding: 0;
+      margin: 0 0 2.5rem;
+    }
+    section.card > h2 {
+      margin: 0 0 1rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
     }
     .step-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 1rem;
+      display: grid;
+      grid-template-columns: var(--tick-col, 1.25rem) minmax(0, 1fr);
+      column-gap: var(--tick-gap, 0.65rem);
+      align-items: start;
       margin-bottom: 0.5rem;
+      cursor: pointer;
     }
     .step-head h2,
     .step-head h3 {
       margin: 0;
-      flex: 1;
-    }
-    section.card > .step-head h2 {
-      font-size: 1.15rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+      grid-column: 2;
     }
     .step-head h3 {
       font-size: 1rem;
       color: var(--text);
     }
+    .step-head > .done-toggle {
+      grid-column: 1;
+    }
+    .step-head > .field-label {
+      display: contents;
+    }
+    .step-head > .field-label > .done-toggle {
+      grid-column: 1;
+    }
+    .step-head > .field-label > :not(.done-toggle) {
+      grid-column: 2;
+    }
     .done-toggle {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      justify-content: center;
+      width: var(--tick-col, 1.25rem);
       flex-shrink: 0;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--muted);
+      margin-top: 0.15rem;
       cursor: pointer;
       user-select: none;
-      padding: 0.25rem 0.5rem;
-      border-radius: 6px;
-      border: 1px solid var(--line);
-      background: #fff;
-      white-space: nowrap;
+      padding: 0;
+      border: none;
+      background: transparent;
     }
-    .done-toggle:hover { border-color: var(--done); color: var(--done); }
     .done-toggle input {
-      width: 1rem;
-      height: 1rem;
+      width: 1.125rem;
+      height: 1.125rem;
+      margin: 0;
       accent-color: var(--done);
       cursor: pointer;
     }
-    .step.is-done { display: none; }
-    body.show-done .step.is-done {
-      display: block;
-      opacity: 0.55;
-      border-style: dashed;
+    .step.is-done {
+      margin-top: 0.35rem;
+      padding-top: 0.15rem;
+      padding-bottom: 0.15rem;
     }
-    body.show-done section.card.step.is-done { display: block; }
+    .step.is-done > :not(.step-head) {
+      display: none;
+    }
+    .step.is-done .step-head {
+      margin-bottom: 0;
+      align-items: center;
+    }
+    .step.is-done .step-head h3,
+    .step.is-done .field-label strong {
+      color: #9aa0a6;
+      font-weight: 400;
+      text-decoration: line-through;
+    }
+    .step.is-done .field-label .req,
+    .step.is-done .field-label .hint,
+    .step.is-done .field-label .opt,
+    .step.is-done .step-head .req,
+    .step.is-done .step-head .opt,
+    .step.is-done .badge {
+      display: none;
+    }
     .step.substep {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--line);
+      --tick-col: 1.25rem;
+      --tick-gap: 0.65rem;
+      margin-top: 1.1rem;
+      padding-top: 0;
     }
     .step.substep:first-of-type { margin-top: 0.75rem; }
+    /* Nest body under the title column (same start as h3 / strong) */
+    .step.substep > :not(.step-head) {
+      margin-left: calc(var(--tick-col) + var(--tick-gap));
+    }
     .badge {
       font-size: 0.7rem;
       font-weight: 600;
@@ -176,10 +224,8 @@
       padding: 0.2rem 0.5rem;
       border-radius: 999px;
     }
-    .badge.done { background: var(--done-bg); color: var(--done); }
     .badge.you { background: var(--todo-bg); color: var(--todo); }
     .badge.skip { background: var(--skip-bg); color: var(--skip); }
-    .badge.pkg { background: #e8f0fe; color: #174ea6; }
     p, li { color: var(--muted); }
     p.lead { color: var(--text); margin-top: 0; }
     p.form-hint {
@@ -188,27 +234,31 @@
       color: var(--muted);
     }
     .field {
-      margin: 1rem 0;
-      border-top: 1px solid var(--line);
-      padding-top: 1rem;
+      margin: 1.1rem 0;
+      padding-top: 0;
     }
-    .field:first-of-type { border-top: 0; padding-top: 0.25rem; }
+    .field:first-of-type { padding-top: 0.25rem; }
     .field-label {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      margin-bottom: 0.35rem;
+      align-items: flex-start;
+      gap: 0.65rem;
+      margin-bottom: 0;
+      width: 100%;
     }
     .field-label strong {
       font-size: 0.9rem;
       color: var(--text);
     }
     .hint { font-size: 0.8rem; color: var(--muted); }
+    .copy-wrap {
+      position: relative;
+      background: var(--code);
+      border-radius: 8px;
+    }
     pre.copy-block {
       margin: 0;
-      padding: 0.85rem 1rem;
-      background: var(--code);
+      padding: 0.85rem 2.5rem 0.85rem 1rem;
+      background: transparent;
       border-radius: 8px;
       white-space: pre-wrap;
       word-break: break-word;
@@ -217,21 +267,38 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       line-height: 1.45;
     }
-    button.copy {
-      flex-shrink: 0;
-      padding: 0.3rem 0.65rem;
-      font-size: 0.8rem;
+    .copy-wrap > button.copy {
+      position: absolute;
+      top: 0.45rem;
+      right: 0.45rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.85rem;
+      height: 1.85rem;
+      padding: 0;
       border-radius: 6px;
-      border: 1px solid var(--line);
-      background: #fff;
+      border: 1px solid transparent;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--muted);
       cursor: pointer;
-      font-family: inherit;
     }
-    button.copy:hover { border-color: var(--accent); color: var(--accent); }
-    button.copy.copied {
+    .copy-wrap > button.copy:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: #fff;
+    }
+    .copy-wrap > button.copy.copied {
       background: var(--done-bg);
       border-color: var(--done);
       color: var(--done);
+    }
+    .copy-wrap > button.copy.copied svg { display: none; }
+    .copy-wrap > button.copy.copied::after {
+      content: "✓";
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1;
     }
     .assets {
       display: grid;
@@ -259,8 +326,6 @@
     .asset .meta a { color: var(--accent); }
     .req { color: #c5221f; font-weight: 600; font-size: 0.75rem; }
     .opt { color: var(--muted); font-size: 0.75rem; }
-    ol.steps { padding-left: 1.25rem; margin: 0; }
-    ol.steps li { margin: 0.45rem 0; }
     ul.cat-list {
       margin: 0.5rem 0 0;
       padding-left: 1.2rem;
@@ -290,126 +355,87 @@
     }
     .toast.show { opacity: 1; }
     .answer-row {
-      display: flex;
-      gap: 0.75rem;
+      display: grid;
+      grid-template-columns: minmax(9rem, 13rem) minmax(0, 1fr);
+      gap: 0.75rem 1rem;
       align-items: baseline;
-      margin: 0.4rem 0;
+      margin: 0.45rem 0;
       font-size: 0.9rem;
     }
-    .answer-row .label { color: var(--muted); min-width: 9rem; }
+    .answer-row .label { color: var(--muted); }
     .answer-row .value { color: var(--text); font-weight: 500; }
-    .all-done {
-      display: none;
-      text-align: center;
-      padding: 2rem 1rem;
-      background: var(--done-bg);
-      border: 1px solid #b7e1c7;
-      border-radius: 12px;
-      margin-bottom: 1rem;
+    .qa-table {
+      margin-top: 0.15rem;
     }
-    .all-done.show { display: block; }
-    .all-done strong { color: var(--done); font-size: 1.1rem; }
   </style>
 </head>
 <body>
-  <header>
+  <header class="app-header">
     <div class="inner">
-      <h1>Publish Autoscroll</h1>
-      <p class="tagline">Mirrors the Chrome Web Store <strong>Store listing</strong> form — tick <strong>Done</strong> on each task to hide it. Defaults: British English, Unlisted.</p>
-      <nav>
-        <a class="btn primary" href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>
-        <a class="btn" href="autoscroll.zip" download>Download zip</a>
-        <a class="btn" href="https://dannyhope.co.uk/autoscroll/" target="_blank" rel="noopener">Privacy / product page</a>
-      </nav>
+      <h1>Publish Autoscroll to Chrome Web Store</h1>
     </div>
   </header>
 
-  <main>
-    <div class="progress-bar">
-      <strong id="progress-text">0 / 0 done</strong>
-      <span class="muted" id="progress-remaining"></span>
-      <label>
-        <input type="checkbox" id="show-done">
-        Show completed
-      </label>
-      <button type="button" class="btn" id="reset-done">Reset ticks</button>
-    </div>
+<main>
+    <!-- ========== UPLOAD THE PACKAGE ========== -->
+    <section class="panel" id="upload-package">
+      <h2>Upload the package</h2>
 
-    <div class="all-done" id="all-done">
-      <strong>All sections ticked</strong>
-      <p style="margin:0.35rem 0 0;color:var(--done)">Store listing checklist complete — submit when the dashboard is ready.</p>
-    </div>
+      <div class="step substep" data-step="open-dashboard">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Open Developer Dashboard</h3>
+        </div>
+        <p class="where">Start here: <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>. If Chrome emailed “update to Manifest V3”, open that existing Autoscroll item (id <code>kgkaecolmndcecnchojbndeanmiokofl</code>) — do not create a second listing.</p>
+        <p class="form-hint">Only use <strong>New item</strong> if that listing is gone from the dashboard. Remaining Manifest V2 store items are removed on 31 August 2026.</p>
+        <p><a class="btn primary" href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Open Developer Dashboard</a></p>
+      </div>
 
-    <nav class="page-nav" aria-label="Sections">
-      <a href="#product-details">Product details</a>
-      <a href="#graphic-assets">Graphic assets</a>
-      <a href="#additional-fields">Additional fields</a>
-      <a href="#privacy-permissions">Privacy &amp; permissions</a>
-      <a href="#zip">Zip</a>
-    </nav>
+      <div class="step substep" data-step="download-zip">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Download package zip</h3>
+        </div>
+        <p class="where">On this helper page. Then upload the zip in the dashboard under <strong>Build → Package</strong>.</p>
+        <p class="form-hint">Save the upload package locally before uploading it in the dashboard.</p>
+        <p><a class="btn primary" href="autoscroll.zip" download>Download autoscroll.zip</a></p>
+      </div>
 
-    <section class="card" id="howto">
-      <h2>How to use this page <span class="badge you">You</span></h2>
-      <ol class="steps">
-        <li>Host <code>privacy-policy.html</code> at <a href="https://dannyhope.co.uk/autoscroll/" target="_blank" rel="noopener">dannyhope.co.uk/autoscroll/</a> before submitting.</li>
-        <li>Dashboard → upload <a href="autoscroll.zip" download><code>autoscroll.zip</code></a> (if not already).</li>
-        <li>Open <strong>Store listing</strong> → fill each task below; tick <strong>Done</strong> on a task to hide it.</li>
-        <li>Title &amp; summary are <strong>from the package</strong> (manifest).</li>
-        <li>Listing copy uses <strong>British English</strong>. Visibility starts as <strong>Unlisted</strong> (link only).</li>
-        <li>Upload graphics from the download links (24-bit PNG, <strong>no alpha</strong>).</li>
-      </ol>
+      <div class="step substep" data-step="upload-zip">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Upload package zip</h3>
+        </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Package</strong> on the existing Autoscroll item.</p>
+        <p class="form-hint">This zip is Manifest V3 (version 0.3, <code>activeTab</code> + <code>scripting</code>). Upload it to the listing Chrome warned about so the store item is no longer V2.</p>
+      </div>
     </section>
 
+    <div class="panel" id="listing">
+    <div class="privacy-alert" id="privacy-alert" role="alert">
+      <strong>Privacy / product page is not reachable</strong>
+      Host or fix
+      <a href="https://dannyhope.co.uk/autoscroll/" target="_blank" rel="noopener">https://dannyhope.co.uk/autoscroll/</a>
+      before submitting the listing. The store needs a live HTTPS privacy policy URL.
+    </div>
+
+    <!-- ========== PRODUCT DETAILS ========== -->
     <section class="card" id="product-details">
-      <h2>Product details <span class="badge you">Form section</span></h2>
-      <p class="form-hint">For all languages · Focus on explaining what the item does and why users should install it.</p>
-
-      <div class="field step substep" data-step="title" data-copy>
-        <div class="step-head">
-          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
-            <div>
-              <strong>Title from package</strong>
-              <span class="badge pkg">From package</span>
-            </div>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
-          </div>
-        </div>
-        <pre class="copy-block">Autoscroll</pre>
-      </div>
-
-      <div class="field step substep" data-step="summary" data-copy>
-        <div class="step-head">
-          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
-            <div>
-              <strong>Summary from package</strong>
-              <span class="badge pkg">From package</span>
-            </div>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
-          </div>
-        </div>
-        <pre class="copy-block">Scroll to the bottom of the page. Click the toolbar icon; scroll up to stop.</pre>
-      </div>
+      <h2>Product details</h2>
 
       <div class="field step substep" data-step="description" data-copy>
         <div class="step-head">
           <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
             <div>
               <strong>Description</strong>
               <span class="req">Required</span>
               <span class="hint"> · max 16,000 characters</span>
             </div>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
           </div>
         </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Store listing</strong> · Product details.</p>
+        <div class="copy-wrap">
         <pre class="copy-block">Autoscroll scrolls the current page toward the bottom so you can read or scan a long page without holding the wheel.
 
 **How to use it**
@@ -424,23 +450,26 @@ No account required. No analytics. No data sent to the developer. Nothing is sto
 
 **Not for**
 Restricted Chrome pages (such as `chrome://` or the Chrome Web Store) cannot be scripted, so the icon does nothing there.</pre>
+        <button type="button" class="copy" aria-label="Copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
       </div>
 
       <div class="field step substep" data-step="category" data-copy>
         <div class="step-head">
           <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
             <div>
               <strong>Category</strong>
               <span class="req">Required</span>
               <span class="hint"> · Productivity is a <em>group</em>, not a choice</span>
             </div>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
           </div>
         </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Store listing</strong> · Product details.</p>
+        <div class="copy-wrap">
         <pre class="copy-block">Tools</pre>
+        <button type="button" class="copy" aria-label="Copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
         <p class="hint" style="margin:0.5rem 0 0">
           In the dropdown, open the <strong>Productivity</strong> group, then pick a leaf category:
         </p>
@@ -452,38 +481,43 @@ Restricted Chrome pages (such as `chrome://` or the Chrome Web Store) cannot be 
           <li class="pick">Tools ← choose this</li>
           <li>Workflow &amp; Planning</li>
         </ul>
+        <p class="hint" style="margin:0.5rem 0 0">
+          <strong>Tools</strong> is the best fit (general utilities).
+        </p>
       </div>
 
       <div class="field step substep" data-step="language" data-copy>
         <div class="step-head">
           <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
             <div>
               <strong>Language</strong>
               <span class="req">Required</span>
               <span class="hint"> · British English</span>
             </div>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
           </div>
         </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Store listing</strong> · Product details.</p>
+        <div class="copy-wrap">
         <pre class="copy-block">English (United Kingdom)</pre>
+        <button type="button" class="copy" aria-label="Copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
         <p class="hint" style="margin:0.5rem 0 0">
-          Prefer <strong>English (United Kingdom)</strong> if listed. Otherwise choose <strong>English</strong> — listing copy stays British.
+          Prefer <strong>English (United Kingdom)</strong> if listed. Otherwise choose <strong>English</strong> — listing copy stays British (customise, colour, behaviours, etc.).
         </p>
       </div>
     </section>
 
+    <!-- ========== GRAPHIC ASSETS ========== -->
     <section class="card" id="graphic-assets">
-      <h2>Graphic assets <span class="badge you">Form section</span></h2>
-      <p class="form-hint">JPEG or <strong>24-bit PNG (no alpha)</strong>. Tick each upload as you finish it.</p>
+      <h2>Graphic assets</h2>
 
       <div class="step substep" data-step="store-icon">
         <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
           <h3>Store icon <span class="req">Required</span></h3>
-          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
         </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Store listing</strong> · Graphic assets.</p>
         <p class="form-hint">128 × 128 · Drop icon here</p>
         <div class="assets">
           <div class="asset">
@@ -499,17 +533,19 @@ Restricted Chrome pages (such as `chrome://` or the Chrome Web Store) cannot be 
 
       <div class="step substep" data-step="promo-video">
         <div class="step-head">
-          <h3>Global promo video <span class="badge skip">Skip</span></h3>
-          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Skip global promo video</h3>
         </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Store listing</strong> · Graphic assets.</p>
         <p class="form-hint">YouTube URL · optional · leave blank.</p>
       </div>
 
       <div class="step substep" data-step="screenshots">
         <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
           <h3>Screenshots <span class="req">At least one required</span></h3>
-          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
         </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Store listing</strong> · Graphic assets.</p>
         <p class="form-hint">Up to 5 · 1,280 × 800 or 640 × 400 · JPEG or 24-bit PNG (no alpha)</p>
         <div class="assets">
           <div class="asset">
@@ -533,9 +569,10 @@ Restricted Chrome pages (such as `chrome://` or the Chrome Web Store) cannot be 
 
       <div class="step substep" data-step="small-promo">
         <div class="step-head">
-          <h3>Small promo tile <span class="opt">Recommended</span></h3>
-          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Recommended small promo tile</h3>
         </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Store listing</strong> · Graphic assets.</p>
         <p class="form-hint">440 × 280 · JPEG or 24-bit PNG (no alpha)</p>
         <div class="assets">
           <div class="asset">
@@ -550,9 +587,10 @@ Restricted Chrome pages (such as `chrome://` or the Chrome Web Store) cannot be 
 
       <div class="step substep" data-step="marquee-promo">
         <div class="step-head">
-          <h3>Marquee promo tile <span class="opt">Optional</span></h3>
-          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Optional marquee promo tile</h3>
         </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Store listing</strong> · Graphic assets.</p>
         <p class="form-hint">1400 × 560 · JPEG or 24-bit PNG (no alpha)</p>
         <div class="assets">
           <div class="asset">
@@ -566,14 +604,16 @@ Restricted Chrome pages (such as `chrome://` or the Chrome Web Store) cannot be 
       </div>
     </section>
 
+    <!-- ========== ADDITIONAL FIELDS ========== -->
     <section class="card" id="additional-fields">
-      <h2>Additional fields <span class="badge you">Form section</span></h2>
+      <h2>Additional fields</h2>
 
       <div class="step substep" data-step="official-url">
         <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
           <h3>Official URL</h3>
-          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
         </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Store listing</strong> · Additional fields.</p>
         <p class="form-hint">Select from verified sites, or leave <strong>None</strong>.</p>
         <div class="answer-row">
           <span class="label">Suggested</span>
@@ -584,40 +624,156 @@ Restricted Chrome pages (such as `chrome://` or the Chrome Web Store) cannot be 
       <div class="step substep" data-step="homepage-url" data-copy>
         <div class="step-head">
           <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
             <div>
               <strong>Homepage URL</strong>
               <span class="hint"> · max 2,048</span>
             </div>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
           </div>
         </div>
-        <pre class="copy-block">https://dannyhope.co.uk</pre>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Store listing</strong> · Additional fields.</p>
+        <div class="copy-wrap">
+        <pre class="copy-block">https://dannyhope.co.uk/autoscroll/</pre>
+        <button type="button" class="copy" aria-label="Copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
       </div>
 
       <div class="step substep" data-step="support-url" data-copy>
         <div class="step-head">
           <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
             <div>
               <strong>Support URL</strong>
               <span class="hint"> · max 2,048</span>
             </div>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
           </div>
         </div>
-        <pre class="copy-block">https://dannyhope.co.uk/feedback</pre>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Store listing</strong> · Additional fields.</p>
+        <div class="copy-wrap">
+        <pre class="copy-block">https://dannyhope.co.uk/autoscroll/</pre>
+        <button type="button" class="copy" aria-label="Copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
       </div>
+        <p class="hint" style="margin:0.5rem 0 0">
+          Autoscroll’s own page — same as Homepage. Do not use the shared <code>/feedback</code> hop here.
+        </p>
+      </div>
+
+    </section>
+    </div>
+
+    <!-- ========== PRIVACY / PERMISSIONS ========== -->
+    <section class="panel" id="privacy-permissions">
+      <h2>Privacy &amp; permissions</h2>
+      <div class="field step substep" data-step="privacy-url" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+            <strong>Privacy policy URL</strong>
+          </div>
+        </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Privacy</strong>.</p>
+        <div class="copy-wrap">
+        <pre class="copy-block">https://dannyhope.co.uk/autoscroll/</pre>
+        <button type="button" class="copy" aria-label="Copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
+      </div>
+
+      <div class="field step substep" data-step="single-purpose" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+            <strong>Single purpose</strong>
+          </div>
+        </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Privacy</strong>.</p>
+        <div class="copy-wrap">
+        <pre class="copy-block">Scroll the current web page toward the bottom when the user clicks the toolbar icon.</pre>
+        <button type="button" class="copy" aria-label="Copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
+      </div>
+
+      <div class="field step substep" data-step="perm-activetab" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+            <strong>activeTab — justification</strong>
+          </div>
+        </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Privacy</strong>.</p>
+        <div class="copy-wrap">
+        <pre class="copy-block">Used only when you click the toolbar icon, so the extension can run on that one tab. It does not have standing access to other tabs or your browsing history.</pre>
+        <button type="button" class="copy" aria-label="Copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
+      </div>
+
+      <div class="field step substep" data-step="perm-scripting" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+            <strong>scripting — justification</strong>
+          </div>
+        </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Privacy</strong>.</p>
+        <div class="copy-wrap">
+        <pre class="copy-block">Injects the scroller script into the tab you just clicked so the page can move toward the bottom. The script does not send page content to the developer.</pre>
+        <button type="button" class="copy" aria-label="Copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
+      </div>
+
+      <div class="field step substep" data-step="privacy-qa">
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+            <strong>Privacy questionnaire</strong>
+          </div>
+        </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Privacy</strong>.</p>
+        <div class="qa-table" role="list">
+          <div class="answer-row" role="listitem">
+            <span class="label">Collect personal data?</span>
+            <span class="value">No (developer does not collect)</span>
+          </div>
+          <div class="answer-row" role="listitem">
+            <span class="label">Data used for</span>
+            <span class="value">Functionality only (scrolling the current tab in the browser)</span>
+          </div>
+          <div class="answer-row" role="listitem">
+            <span class="label">Data sold?</span>
+            <span class="value">No</span>
+          </div>
+          <div class="answer-row" role="listitem">
+            <span class="label">Privacy policy URL</span>
+            <span class="value">https://dannyhope.co.uk/autoscroll/</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field step substep" data-step="support-email" data-copy>
+        <div class="step-head">
+          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
+            <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+            <strong>Support email</strong>
+          </div>
+        </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Privacy</strong>.</p>
+        <div class="copy-wrap">
+        <pre class="copy-block">danny.hope@gmail.com</pre>
+        <button type="button" class="copy" aria-label="Copy" title="Copy"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
+      </div>
+    </section>
+
+    <div class="panel">
+    <!-- ========== DISTRIBUTION ========== -->
+    <section class="card" id="distribution">
+      <h2>Distribution</h2>
 
       <div class="step substep" data-step="mature">
         <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
           <h3>Mature content</h3>
-          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
         </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Distribution</strong>.</p>
         <div class="answer-row">
           <span class="label">Answer</span>
           <span class="value">No</span>
@@ -626,9 +782,10 @@ Restricted Chrome pages (such as `chrome://` or the Chrome Web Store) cannot be 
 
       <div class="step substep" data-step="visibility">
         <div class="step-head">
-          <h3>Item support / Visibility</h3>
-          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Visibility / Item support</h3>
         </div>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Distribution</strong>.</p>
         <div class="answer-row">
           <span class="label">Visibility</span>
           <span class="value">Unlisted</span>
@@ -642,131 +799,31 @@ Restricted Chrome pages (such as `chrome://` or the Chrome Web Store) cannot be 
         </div>
       </div>
     </section>
+    </div>
 
-    <section class="card" id="privacy-permissions">
-      <h2>Privacy &amp; permissions <span class="badge you">Other tabs</span></h2>
-      <p class="lead">Not on Store listing — use when the dashboard asks.</p>
+    <!-- ========== SUBMIT ========== -->
+    <section class="panel" id="submit">
+      <h2>Submit for review</h2>
 
-      <div class="field step substep" data-step="privacy-url" data-copy>
+      <div class="step substep" data-step="submit-review">
         <div class="step-head">
-          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
-            <strong>Privacy policy URL</strong>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
-          </div>
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Submit for review</h3>
         </div>
-        <pre class="copy-block">https://dannyhope.co.uk/autoscroll/</pre>
-      </div>
-
-      <div class="field step substep" data-step="single-purpose" data-copy>
-        <div class="step-head">
-          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
-            <strong>Single purpose</strong>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
-          </div>
-        </div>
-        <pre class="copy-block">Scroll the current web page toward the bottom when the user clicks the toolbar icon.</pre>
-      </div>
-
-      <div class="field step substep" data-step="perm-activetab" data-copy>
-        <div class="step-head">
-          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
-            <strong>activeTab — justification</strong>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
-          </div>
-        </div>
-        <pre class="copy-block">Used only when you click the toolbar icon, so the extension can run on that one tab. It does not have standing access to other tabs or your browsing history.</pre>
-      </div>
-
-      <div class="field step substep" data-step="perm-scripting" data-copy>
-        <div class="step-head">
-          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
-            <strong>scripting — justification</strong>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
-          </div>
-        </div>
-        <pre class="copy-block">Injects the scroller script into the tab you just clicked so the page can move toward the bottom. The script does not send page content to the developer.</pre>
-      </div>
-
-      <div class="field step substep" data-step="perm-removed" data-copy>
-        <div class="step-head">
-          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
-            <strong>tabs / host permissions — not requested</strong>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
-          </div>
-        </div>
-        <pre class="copy-block">The Manifest V2 listing asked for tabs plus http://*/* and https://*/*. The MV3 package does not request those. A toolbar click (activeTab) is enough.</pre>
-      </div>
-
-      <div class="field step substep" data-step="privacy-qa" data-copy>
-        <div class="step-head">
-          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
-            <strong>Privacy questionnaire</strong>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
-          </div>
-        </div>
-        <pre class="copy-block">Collect personal data? No (developer does not collect)
-Data used for: Functionality only (scrolling the current tab in the browser)
-Data sold? No
-Privacy policy URL: https://dannyhope.co.uk/autoscroll/</pre>
-      </div>
-
-      <div class="field step substep" data-step="support-email" data-copy>
-        <div class="step-head">
-          <div class="field-label" style="border:0;margin:0;padding:0;width:100%">
-            <strong>Support email</strong>
-            <div style="display:flex;gap:0.5rem;align-items:center">
-              <button type="button" class="copy">Copy</button>
-              <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-            </div>
-          </div>
-        </div>
-        <pre class="copy-block">danny.hope@gmail.com</pre>
-      </div>
-    </section>
-
-    <section class="card" id="zip">
-      <h2>Package zip</h2>
-      <div class="step substep" data-step="zip-upload">
-        <div class="step-head">
-          <h3>Upload package</h3>
-          <label class="done-toggle"><input type="checkbox" data-done> Done</label>
-        </div>
-        <p class="lead">Upload if you haven’t already (or after any code change).</p>
-        <p><a class="btn primary" href="autoscroll.zip" download>Download autoscroll.zip</a></p>
+        <p class="where">In the <a href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Developer Dashboard</a>, under <strong>Build → Status</strong>.</p>
+        <p class="form-hint">Click <strong>Submit for review</strong> when Package, Store listing, Privacy, and Distribution are complete. Review usually takes hours to a few days.</p>
+        <p><a class="btn primary" href="https://chrome.google.com/webstore/devconsole" target="_blank" rel="noopener">Open Developer Dashboard</a></p>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="inner">
-      Category: Productivity group → <strong>Tools</strong>.
-      Defaults: British English · Unlisted (link only).
-      Done ticks are on tasks only; saved in this browser.
-    </div>
-  </footer>
 
   <div class="toast" id="toast" role="status">Copied</div>
 
   <script>
-    const STORAGE_KEY = 'autoscroll-publish-done-v1';
+    const STORAGE_KEY = 'autoscroll-publish-done-v3';
+    const PRIVACY_URL = 'https://dannyhope.co.uk/autoscroll/';
+    const PRIVACY_PROBE = '';
     const toast = document.getElementById('toast');
     let toastTimer;
 
@@ -789,30 +846,18 @@ Privacy policy URL: https://dannyhope.co.uk/autoscroll/</pre>
       localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
     }
 
-    function updateProgress() {
-      const steps = [...document.querySelectorAll('.step[data-step]')];
-      const total = steps.length;
-      const done = steps.filter((s) => s.classList.contains('is-done')).length;
-      document.getElementById('progress-text').textContent = `${done} / ${total} done`;
-      document.getElementById('progress-remaining').textContent =
-        done === total ? '' : `${total - done} remaining`;
-      document.getElementById('all-done').classList.toggle('show', done === total && total > 0);
-    }
-
     function applyDoneState() {
       const map = loadDone();
       document.querySelectorAll('.step[data-step]').forEach((step) => {
-        const id = step.dataset.step;
-        const checked = !!map[id];
+        const checked = !!map[step.dataset.step];
         step.classList.toggle('is-done', checked);
-        const own = step.querySelector(':scope > .step-head input[data-done]');
+        const own = step.querySelector('.step-head input[data-done]');
         if (own) own.checked = checked;
       });
-      updateProgress();
     }
 
     document.querySelectorAll('.step[data-step]').forEach((step) => {
-      const input = step.querySelector(':scope > .step-head input[data-done]');
+      const input = step.querySelector('.step-head input[data-done]');
       if (!input) return;
       input.addEventListener('change', () => {
         const map = loadDone();
@@ -820,19 +865,15 @@ Privacy policy URL: https://dannyhope.co.uk/autoscroll/</pre>
         else delete map[step.dataset.step];
         saveDone(map);
         step.classList.toggle('is-done', input.checked);
-        updateProgress();
-        if (input.checked) showToast('Hidden — tick “Show completed” to bring back');
       });
-    });
-
-    document.getElementById('show-done').addEventListener('change', (e) => {
-      document.body.classList.toggle('show-done', e.target.checked);
-    });
-
-    document.getElementById('reset-done').addEventListener('click', () => {
-      localStorage.removeItem(STORAGE_KEY);
-      applyDoneState();
-      showToast('All ticks cleared');
+      const head = step.querySelector('.step-head');
+      if (!head) return;
+      head.addEventListener('click', (e) => {
+        if (e.target.closest('input[data-done], a, button')) return;
+        e.preventDefault();
+        input.checked = !input.checked;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      });
     });
 
     document.querySelectorAll('[data-copy]').forEach((field) => {
@@ -848,19 +889,55 @@ Privacy policy URL: https://dannyhope.co.uk/autoscroll/</pre>
         try {
           await navigator.clipboard.writeText(text);
           btn.classList.add('copied');
-          btn.textContent = 'Copied';
           showToast('Copied to clipboard');
-          setTimeout(() => {
-            btn.classList.remove('copied');
-            btn.textContent = 'Copy';
-          }, 1500);
+          setTimeout(() => btn.classList.remove('copied'), 1500);
         } catch {
           showToast('Copy failed — select the text manually');
         }
       });
     });
 
+    function showPrivacyAlert() {
+      document.getElementById('privacy-alert').classList.add('show');
+    }
+
+    /** Only alerts when the page is confirmed missing. Silent when OK or unverifiable. */
+    async function checkPrivacyPage() {
+      try {
+        const res = await fetch(PRIVACY_URL, { method: 'GET', mode: 'cors', cache: 'no-store' });
+        if (res.ok) return;
+        if (res.status >= 400) {
+          showPrivacyAlert();
+          return;
+        }
+      } catch {
+        // CORS / file:// — fall through to image probe
+      }
+
+      if (!PRIVACY_PROBE) return;
+
+      await new Promise((resolve) => {
+        const img = new Image();
+        const timer = setTimeout(() => {
+          img.onload = img.onerror = null;
+          resolve(); // timeout → don't alert (unverifiable)
+        }, 8000);
+        img.onload = () => {
+          clearTimeout(timer);
+          resolve();
+        };
+        img.onerror = () => {
+          clearTimeout(timer);
+          showPrivacyAlert();
+          resolve();
+        };
+        img.src = PRIVACY_PROBE + (PRIVACY_PROBE.includes('?') ? '&' : '?') + 't=' + Date.now();
+      });
+    }
+
     applyDoneState();
+    checkPrivacyPage();
+
   </script>
 </body>
 </html>

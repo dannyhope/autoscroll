@@ -5,7 +5,7 @@
 Markdown below is a backup. The HTML page is what you should use.
 
 ## Already done
-- Manifest V3 (`activeTab` + `scripting`; no `tabs`, no host permissions)
+- Manifest V3 package version **0.3** (`activeTab` + `scripting`; no `tabs`, no host permissions). Chrome’s “update to Manifest V3” email is about the **dashboard listing**, not this folder.
 - Extension icons (16, 48, 128)
 - Privacy policy HTML (`privacy-policy.html` at project root) — host at https://dannyhope.co.uk/autoscroll/
 - Store listing copy (`publish/LISTING.md`)
@@ -20,7 +20,7 @@ Markdown below is a backup. The HTML page is what you should use.
 
 Your account is active — skip the $5 fee.
 
-Previous listing id (2014, now looks unpublished): `kgkaecolmndcecnchojbndeanmiokofl`. Treat this as a **new item** unless the dashboard still shows that listing.
+Previous listing id (2014): `kgkaecolmndcecnchojbndeanmiokofl`. If Chrome emailed an MV3 warning, that item is still in the dashboard — **upload this zip there**. Remaining Manifest V2 listings leave the store on **31 August 2026**. Use **New item** only if that listing is gone.
 
 ## Step 2 — Privacy policy
 
