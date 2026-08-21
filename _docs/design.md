@@ -1,6 +1,6 @@
 # Autoscroll — Design
 
-> Living document. Update whenever visual design changes. Last updated: 2026-08-19.
+> Living document. Update whenever visual design changes. Last updated: 2026-08-20.
 >
 > Companion to [`spec.md`](./spec.md) (behaviour). This file is the source of truth for **how Autoscroll should look**.
 

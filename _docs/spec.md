@@ -1,6 +1,6 @@
 # Autoscroll — Product Spec
 
-> Living document. Update whenever behaviour changes. Last updated: 2026-08-17.
+> Living document. Update whenever behaviour changes. Last updated: 2026-08-20.
 >
 > **This file is the source of truth for how Autoscroll should work.** If code, README, or store listing copy disagree with this spec, update them to match this document.
 
@@ -60,7 +60,7 @@ There is no options page, side panel, or on-page overlay.
 | `activeTab` | Access only the tab the user just clicked the icon on. |
 | `scripting` | Inject `bookmarklet.js` into that tab. |
 
-Manifest V2 used `tabs` plus `http://*/*` and `https://*/*`. Those are **not** in the MV3 package: the toolbar click is enough.
+Manifest V2 used `tabs` plus `http://*/*` and `https://*/*`. Those are **not** in the MV3 package: the toolbar click is enough. Package version **0.3**. The loadable files are Manifest V3; if Chrome still warns, the **published** listing has not been replaced yet.
 
 ---
 
