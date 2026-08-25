@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Going public — Autoscroll</title>
+  <link rel="stylesheet" href="operator.css">
+  <style>
+    header {
+      background: transparent;
+      border: 0;
+      padding: 1.5rem 1.25rem 0.75rem;
+    }
+    header .inner, main {
+      max-width: 54rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1 {
+      font-size: 1.35rem;
+      margin: 0;
+      line-height: 1.3;
+      color: var(--text);
+      font-weight: 600;
+    }
+    main {
+      max-width: calc(54rem + 2.5rem);
+      padding: 0 1.25rem 2rem;
+      margin: 1rem auto 2rem;
+    }
+    .panel {
+      background: var(--card);
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      padding: 1.5rem 1.5rem 1.75rem;
+      margin: 0 0 1rem;
+    }
+    .panel > h2 {
+      margin: 0 0 1rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .status-card .label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 0.35rem;
+    }
+    .status-card[data-status="Public"] .label { color: var(--status-public); }
+    .status-card[data-status="Shareable"] .label { color: var(--status-mixed); }
+    .status-card[data-status="Mixed"] .label { color: var(--status-mixed); }
+    .status-card[data-status="Not public"] .label { color: var(--status-private); }
+    .status-card p { margin: 0; color: var(--muted); }
+    .where {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin: 0 0 0.65rem;
+    }
+    .where a { color: var(--accent); }
+    .step-head {
+      display: grid;
+      grid-template-columns: var(--tick-col, 1.25rem) minmax(0, 1fr);
+      column-gap: var(--tick-gap, 0.65rem);
+      align-items: start;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+    }
+    .step-head h3 {
+      margin: 0;
+      grid-column: 2;
+      font-size: 1rem;
+      color: var(--text);
+    }
+    .step-head > .done-toggle { grid-column: 1; }
+    .done-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--tick-col, 1.25rem);
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+      cursor: pointer;
+      user-select: none;
+      padding: 0;
+      border: none;
+      background: transparent;
+    }
+    .done-toggle input {
+      width: 1.125rem;
+      height: 1.125rem;
+      margin: 0;
+      accent-color: var(--done);
+      cursor: pointer;
+    }
+    .step.is-done {
+      margin-top: 0.35rem;
+      padding-top: 0.15rem;
+      padding-bottom: 0.15rem;
+    }
+    .step.is-done > :not(.step-head) { display: none; }
+    .step.is-done .step-head { margin-bottom: 0; align-items: center; }
+    .step.is-done .step-head h3 {
+      color: var(--muted);
+      font-weight: 400;
+      text-decoration: line-through;
+    }
+    .step.substep {
+      --tick-col: 1.25rem;
+      --tick-gap: 0.65rem;
+      margin-top: 1.1rem;
+      padding-top: 0;
+    }
+    .step.substep:first-of-type { margin-top: 0; }
+    .step.substep > :not(.step-head) {
+      margin-left: calc(var(--tick-col) + var(--tick-gap));
+    }
+    p, li { color: var(--muted); }
+    p.form-hint {
+      font-size: 0.85rem;
+      margin: 0 0 0.75rem;
+      color: var(--muted);
+    }
+    a { color: var(--accent); }
+    code {
+      font-size: 0.85em;
+      background: var(--code);
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="inner">
+      <h1>Going public — Autoscroll</h1>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel status-card" data-status="Shareable" id="status">
+      <p class="label">Shareable</p>
+      <p>Sendable page and store hop exist. Deploy dannyhope.co.uk if the live site is behind, then paste https://dannyhope.co.uk/autoscroll/ to people you know. Remaining ticks (send it, optional blog) are not required before you send the link.</p>
+    </section>
+
+    <section class="panel" id="share">
+      <h2>Share with people you know</h2>
+
+      <!-- TASK: website-writeup — omit if N/A -->
+      <div class="step substep" data-step="website-writeup" data-verified="true">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Sendable page on dannyhope.co.uk</h3>
+        </div>
+        <p class="where">In the dannyhope.co.uk site repo: <code>_data/projects.json</code> (name + real description) and a real page at <code>/{slug}/</code> — not only a hop, and not privacy-policy-only.</p>
+        <p class="form-hint">This is the URL you paste to people you know. It must say what it is, how to try it, and how to send feedback or bugs. Model: <code>autoscroll/index.html</code>. A hop is a one-line meta-refresh — that is not this page.</p>
+      </div>
+
+      <!-- TASK: feedback-hop — omit if not user-facing -->
+      <div class="step substep" data-step="feedback-hop" data-verified="true">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Feedback hop on the sendable page</h3>
+        </div>
+        <p class="where">User-facing apps: public feedback href is <a href="https://dannyhope.co.uk/feedback">https://dannyhope.co.uk/feedback</a> — on the sendable page, not only in the README.</p>
+      </div>
+
+      <!-- TASK: send-to-people -->
+      <div class="step substep" data-step="send-to-people">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Send the page to people you know</h3>
+        </div>
+        <p class="where">Your messages — paste <code>https://dannyhope.co.uk/autoscroll/</code> (live after dannyhope.co.uk is deployed).</p>
+        <p class="form-hint">This is the step that closes the loop. A handful of people is enough. You do not need the store or GitHub to be Public first.</p>
+      </div>
+    </section>
+
+    <section class="panel" id="core">
+      <h2>Public presence</h2>
+
+
+      <!-- TASK: stable-hop — omit if no public third-party hrefs will exist -->
+      <div class="step substep" data-step="stable-hop" data-verified="true">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Stable hop for public third-party hrefs</h3>
+        </div>
+        <p class="where">Write-up is <code>/autoscroll/</code>. GitHub hop: <code>/autoscroll/source/</code>. Store hop: <code>/autoscroll/store/</code>.</p>
+        <p class="form-hint">A hop is a redirect, not a write-up.</p>
+      </div>
+
+      <!-- TASK: attribution -->
+      <div class="step substep" data-step="attribution" data-verified="true">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Attribution “A Danny Hope {kind}”</h3>
+        </div>
+        <p class="where">In-app footer, popup, or README — link to <a href="https://dannyhope.co.uk">https://dannyhope.co.uk</a> (never dannyhope.com).</p>
+      </div>
+
+      <!-- TASK: github-visibility — omit if no git remote and none planned -->
+      <div class="step substep" data-step="github-visibility" data-verified="true">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>GitHub visibility</h3>
+        </div>
+        <p class="where">GitHub repo Settings, or <code>gh repo view --json isPrivate,url,visibility</code>. A folder name containing <code>(private)</code> is a strong private signal.</p>
+        <p class="form-hint">Do not switch a private repo to public unless Danny asks.</p>
+      </div>
+
+      <!-- TASK: readme-purpose — omit if there will be no public repo -->
+      <div class="step substep" data-step="readme-purpose" data-verified="true">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>README purpose</h3>
+        </div>
+        <p class="where">This repo’s README — purpose before install or usage, on a public repo.</p>
+      </div>
+    </section>
+
+    <!-- PANEL: extension — delete this whole panel if not an extension -->
+    <section class="panel" id="extension">
+      <h2>Store listing</h2>
+      <div class="step substep" data-step="store-listing-helper" data-verified="true">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Store listing helper is ready / listing submitted</h3>
+        </div>
+        <p class="where">This repo: <code>publish/index.html</code> (Chrome Web Store helper). Do the store tasks there — do not duplicate them here.</p>
+      </div>
+      <div class="step substep" data-step="store-hop" data-verified="true">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Store hop with the listing URL</h3>
+        </div>
+        <p class="where">dannyhope.co.uk site repo: <code>autoscroll/store/index.html</code> (hops skill). Public “Add to Chrome” links use <code>https://dannyhope.co.uk/autoscroll/store/</code>, not chromewebstore.google.com.</p>
+        <p class="form-hint">Unlisted is fine. You still need the item URL in the hop so testers have one install button.</p>
+      </div>
+    </section>
+
+
+    <section class="panel" id="nice">
+      <h2>Optional</h2>
+      <div class="step substep" data-step="wiki-page">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Optional wiki page</h3>
+        </div>
+        <p class="where"><code>/wiki</code> skill — dannyhope.co.uk/wiki.</p>
+      </div>
+      <div class="step substep" data-step="launch-blog">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Optional launch blog</h3>
+        </div>
+        <p class="where"><code>/blog</code> skill.</p>
+      </div>
+      <div class="step substep" data-step="marketing-page">
+        <div class="step-head">
+          <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
+          <h3>Optional marketing page</h3>
+        </div>
+        <p class="where"><code>/do-marketing</code> skill.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'autoscroll-public-done-v1';
+
+    function loadDone() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw !== null) return JSON.parse(raw);
+      } catch { /* seed below */ }
+      const seed = {};
+      document.querySelectorAll('.step[data-step][data-verified="true"]').forEach((step) => {
+        seed[step.dataset.step] = true;
+      });
+      return seed;
+    }
+
+    function saveDone(map) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
+    }
+
+    function applyDoneState() {
+      const map = loadDone();
+      document.querySelectorAll('.step[data-step]').forEach((step) => {
+        const checked = !!map[step.dataset.step];
+        step.classList.toggle('is-done', checked);
+        const own = step.querySelector('.step-head input[data-done]');
+        if (own) own.checked = checked;
+      });
+    }
+
+    document.querySelectorAll('.step[data-step]').forEach((step) => {
+      const input = step.querySelector('.step-head input[data-done]');
+      if (!input) return;
+      input.addEventListener('change', () => {
+        const map = loadDone();
+        if (input.checked) map[step.dataset.step] = true;
+        else delete map[step.dataset.step];
+        saveDone(map);
+        step.classList.toggle('is-done', input.checked);
+      });
+      const head = step.querySelector('.step-head');
+      if (!head) return;
+      head.addEventListener('click', (e) => {
+        if (e.target.closest('input[data-done], a, button')) return;
+        e.preventDefault();
+        input.checked = !input.checked;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
+
+    applyDoneState();
+  </script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+/* Operator HTML only (progress dashboards, helper pages, publish checklists).
+   Canonical: ~/.claude/templates/operator.css
+   Colours from ~/.claude/skills/design-system/references/brand.md (Danny Hope Ltd).
+   Product websites/apps do not use this file — they use _docs/design.md + shadcn.
+   Copy this file next to the HTML (or inline it at write time). Do not invent a palette. */
+
+:root {
+  color-scheme: light dark;
+
+  --color-cool-grey-95: #010F15;
+  --color-cool-grey-90: #1A272C;
+  --color-cool-grey-80: #343F44;
+  --color-cool-grey-70: #4B565A;
+  --color-cool-grey-60: #616E73;
+  --color-cool-grey-50: #7B858A;
+  --color-cool-grey-40: #8C979C;
+  --color-cool-grey-30: #A5B0B5;
+  --color-cool-grey-20: #C7D0D4;
+  --color-cool-grey-10: #E6E7E8;
+  --color-cool-grey-5: #F0F2F2;
+  --color-cool-grey-2: #F8F9FA;
+
+  --color-ux-red: #C9003A;
+  --color-ux-red-plus-1: #E4003D;
+  --color-ux-red-plus-3: #FF4058;
+  --color-ux-blue-minus-2: #0C679C;
+  --color-ux-blue: #108BC1;
+  --color-ux-blue-plus-1: #2DA5DB;
+  --color-ux-blue-plus-2: #60BFEB;
+  --color-ux-blue-plus-3: #A1DCF4;
+  --color-ux-green-minus-3: #006300;
+  --color-ux-green-minus-4: #004C00;
+  --color-ux-amber-minus-3: #CF4000;
+  --color-ux-amber-plus-3: #FFFDD8;
+
+  --bg: var(--color-cool-grey-2);
+  --card: #fff;
+  --text: var(--color-cool-grey-80);
+  --heading: var(--color-cool-grey-90);
+  --muted: var(--color-cool-grey-60);
+  --line: var(--color-cool-grey-10);
+  --link: var(--color-cool-grey-95);
+  --link-hover: var(--color-ux-red);
+  --accent: var(--color-ux-blue-minus-2);
+  --done: var(--color-ux-green-minus-3);
+  --code: var(--color-cool-grey-5);
+  --radius: 12px;
+
+  --status-public: var(--color-ux-green-minus-3);
+  --status-public-bg: #D7FBC9;
+  --status-mixed: var(--color-ux-amber-minus-3);
+  --status-mixed-bg: var(--color-ux-amber-plus-3);
+  --status-private: var(--color-cool-grey-60);
+  --status-private-bg: var(--color-cool-grey-5);
+
+  --chart-hours: var(--color-cool-grey-50);
+  --chart-hours-fill: color-mix(in srgb, var(--color-cool-grey-50) 45%, transparent);
+  --chart-pct: var(--color-ux-blue-minus-2);
+  --chart-pct-fill: color-mix(in srgb, var(--color-ux-blue-minus-2) 12%, transparent);
+  --chart-grid: color-mix(in srgb, var(--color-cool-grey-90) 8%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: var(--color-cool-grey-95);
+    --card: var(--color-cool-grey-90);
+    --text: var(--color-cool-grey-20);
+    --heading: var(--color-cool-grey-10);
+    --muted: var(--color-cool-grey-40);
+    --line: var(--color-cool-grey-80);
+    --link: var(--color-ux-blue-plus-3);
+    --link-hover: var(--color-ux-red-plus-3);
+    --accent: var(--color-ux-blue-plus-2);
+    --done: #7BF862;
+    --code: var(--color-cool-grey-80);
+    --status-public: #7BF862;
+    --status-public-bg: var(--color-cool-grey-90);
+    --status-mixed: #FFBD63;
+    --status-mixed-bg: var(--color-cool-grey-90);
+    --status-private: var(--color-cool-grey-40);
+    --status-private-bg: var(--color-cool-grey-80);
+    --chart-hours: var(--color-cool-grey-40);
+    --chart-pct: var(--color-ux-blue-plus-2);
+    --chart-grid: color-mix(in srgb, var(--color-cool-grey-10) 8%, transparent);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.page {
+  max-width: 54rem;
+  margin: 2.5rem auto;
+  padding: 0 1.5rem 3rem;
+}
+
+.page-wide {
+  max-width: 72rem;
+  margin: 2.5rem auto;
+  padding: 0 1.5rem 3rem;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--heading);
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.55rem;
+  margin: 0 0 0.35rem;
+  line-height: 1.3;
+}
+
+h2 {
+  font-size: 1.12rem;
+  margin: 2rem 0 0.45rem;
+}
+
+p.meta,
+p.hint,
+.muted {
+  color: var(--muted);
+}
+
+p.meta {
+  margin: 0 0 1.6rem;
+}
+
+p.hint {
+  margin: 0 0 0.7rem;
+  font-size: 0.95rem;
+}
+
+a {
+  color: var(--accent);
+}
+
+a:hover {
+  color: var(--link-hover);
+}
+
+.panel {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1.1rem 1rem 0.6rem;
+}
+
+.stats {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.4rem;
+}
+
+.stat .n {
+  font-size: 1.7rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--heading);
+}
+
+.stat .l {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.attribution {
+  margin: 2.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.attribution a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.attribution a:hover {
+  color: var(--heading);
+}
+
+.panel.run {
+  margin-bottom: 1.4rem;
+}
+
+.run-headline {
+  margin: 0 0 0.35rem;
+  font-weight: 600;
+  color: var(--heading);
+}
+
+.run[data-state="running"] .run-headline {
+  color: var(--accent);
+}
+
+.run[data-state="finished"] .run-headline {
+  color: var(--done);
+}
+
+.run[data-state="paused"] .run-headline,
+.run[data-state="idle"] .run-headline {
+  color: var(--muted);
+}
+
+.run-detail,
+.run-listen {
+  margin: 0 0 0.35rem;
+}
+
+.run-listen {
+  color: var(--heading);
+}
+
+.run-support-label {
+  margin: 0.7rem 0 0.2rem;
+}
+
+.run-support {
+  margin: 0;
+  padding: 0 0 0.4rem 1.15rem;
+  color: var(--text);
+}
+  display: grid;
+  gap: 0.7rem;
+  padding: 1.1rem 1rem 1rem;
+}
+
+.growth-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.growth-track {
+  position: relative;
+  height: 7.5rem;
+  border-radius: var(--radius);
+  background: var(--code);
+  overflow: hidden;
+}
+
+.growth-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  background: var(--chart-pct-fill);
+}
+
+.growth-track canvas {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.book-player audio {
+  width: 100%;
+  height: 2.6rem;
+}
+
+.download-wrap {
+  margin: 0 0 1.4rem;
+}
+
+a.download {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.5rem;
+  padding: 0.9rem 1.4rem;
+  border-radius: var(--radius);
+  background: var(--done);
+  color: var(--card);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a.download:hover {
+  color: var(--card);
+  filter: brightness(1.08);
+}
