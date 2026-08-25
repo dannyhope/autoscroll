@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dannify status — Autoscroll</title>
+  <link rel="stylesheet" href="operator.css">
+  <style>
+    .panel { margin: 0 0 1rem; }
+    .panel h2 { margin-top: 0; }
+    .panel ul { margin: 0 0 0.85rem; padding-left: 1.2rem; }
+    .panel li { margin: 0 0 0.35rem; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Dannify status — Autoscroll</h1>
+    <p class="meta">Living audit. Regenerated whenever <code>/dannify</code> runs. Last updated: 2026-08-25.</p>
+    <p class="hint">What still needs doing, then what’s already up to spec. Product truth is <code>_docs/spec.md</code> and <code>_docs/design.md</code>. Current KPI is <code>_docs/now.md</code>.</p>
+    <p class="hint"><strong>Detected:</strong> vanilla Chrome extension (toolbar click injects <code>bookmarklet.js</code>). Keep this stack — do not migrate to Plasmo. No popup, options, or side panel.</p>
+
+    <section class="panel">
+      <h2>Improvements</h2>
+      <h3>Should</h3>
+      <ul>
+        <li>Add <code>_docs/now.md</code> — current KPI (not the purpose). Set with <code>/goal</code>; do not invent one.</li>
+        <li>State an accessibility level in <code>_docs/spec.md</code> (honest “none / no thought given” is fine).</li>
+        <li><code>publish/index.html</code> needs sibling <code>operator.css</code> from the template; delete the invented <code>:root</code> palette.</li>
+        <li><code>usability-test.html</code> needs sibling <code>operator.css</code> (or link <code>_docs/operator.css</code>); drop the ad-hoc system-ui palette.</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Already right</h2>
+      <ul>
+        <li><code>_docs/spec.md</code> covers purpose, toolbar + injected scroller, permissions, privacy, and non-goals</li>
+        <li><code>_docs/design.md</code> covers toolbar icon, no on-page UI, British English, store visuals</li>
+        <li>README has purpose before install/usage; load-unpacked steps in README and <code>CLAUDE.md</code></li>
+        <li>Attribution “A Danny Hope product” → https://dannyhope.co.uk in README and privacy policy (no popup for a footer)</li>
+        <li>Public links use dannyhope.co.uk hops (store, source, feedback, bookmarklet tool)</li>
+        <li>Manifest V3 package (<code>activeTab</code> + <code>scripting</code>); vanilla stack kept</li>
+        <li><code>publish/</code> pack present (<code>index.html</code>, listing, zip, assets)</li>
+        <li><code>.in/</code> inbox, <code>_vibing/</code>, <code>.gitignore</code> (<code>_vibing/</code>, <code>.DS_Store</code>)</li>
+        <li><code>autoscroll.code-workspace</code>, Bombay <code>projects.json</code> entry, usability scaffold files</li>
+        <li>Toolbar icons mid-grey glyph on transparent; British English in listing copy</li>
+        <li>Sitemap / dev-port / Prototype Panels / Rebuild desktop skipped (not applicable)</li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>
