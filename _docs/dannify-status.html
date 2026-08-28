@@ -15,18 +15,22 @@
 <body>
   <div class="page">
     <h1>Dannify status — Autoscroll</h1>
-    <p class="meta">Living audit. Regenerated whenever <code>/dannify</code> runs. Last updated: 2026-08-25.</p>
+    <p class="meta">Living audit. Regenerated whenever <code>/dannify</code> runs. Last updated: 2026-08-28.</p>
     <p class="hint">What still needs doing, then what’s already up to spec. Product truth is <code>_docs/spec.md</code> and <code>_docs/design.md</code>. Current KPI is <code>_docs/now.md</code>.</p>
     <p class="hint"><strong>Detected:</strong> vanilla Chrome extension (toolbar click injects <code>bookmarklet.js</code>). Keep this stack — do not migrate to Plasmo. No popup, options, or side panel.</p>
 
     <section class="panel">
       <h2>Improvements</h2>
+      <h3>Must</h3>
+      <ul>
+        <li>Add the managed <code>autoscroll.test</code> local-domain script and mapping; this repo has no server, but every repo must have the stable hostname.</li>
+      </ul>
       <h3>Should</h3>
       <ul>
         <li>Add <code>_docs/now.md</code> — current KPI (not the purpose). Set with <code>/goal</code>; do not invent one.</li>
         <li>State an accessibility level in <code>_docs/spec.md</code> (honest “none / no thought given” is fine).</li>
-        <li><code>publish/index.html</code> needs sibling <code>operator.css</code> from the template; delete the invented <code>:root</code> palette.</li>
-        <li><code>usability-test.html</code> needs sibling <code>operator.css</code> (or link <code>_docs/operator.css</code>); drop the ad-hoc system-ui palette.</li>
+        <li><code>publish/index.html</code> needs sibling <code>operator.css</code> from the template; remove its ad-hoc palette.</li>
+        <li><code>usability-test.html</code> needs sibling <code>operator.css</code> (or a link to <code>_docs/operator.css</code>); remove its ad-hoc palette.</li>
       </ul>
     </section>
 
@@ -43,7 +47,7 @@
         <li><code>.in/</code> inbox, <code>_vibing/</code>, <code>.gitignore</code> (<code>_vibing/</code>, <code>.DS_Store</code>)</li>
         <li><code>autoscroll.code-workspace</code>, Bombay <code>projects.json</code> entry, usability scaffold files</li>
         <li>Toolbar icons mid-grey glyph on transparent; British English in listing copy</li>
-        <li>Sitemap / dev-port / Prototype Panels / Rebuild desktop skipped (not applicable)</li>
+        <li>Sitemap / dev-port / Prototype Panels / Rebuild desktop skipped (not applicable); no local start command exists</li>
       </ul>
     </section>
   </div>
