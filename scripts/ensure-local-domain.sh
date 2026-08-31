@@ -13,7 +13,12 @@ else
 	PROJECT_SLUG="$(basename "$ROOT" | LC_ALL=C tr '[:upper:]' '[:lower:]' | LC_ALL=C sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')"
 fi
 
-DOMAIN="${DANNIFY_LOCAL_DOMAIN:-${PROJECT_SLUG}.test}"
+DOMAIN_FILE="$ROOT/.local-domain"
+if [[ -z "${DANNIFY_LOCAL_DOMAIN:-}" && -r "$DOMAIN_FILE" ]]; then
+	DOMAIN="$(tr -d '[:space:]' < "$DOMAIN_FILE")"
+else
+	DOMAIN="${DANNIFY_LOCAL_DOMAIN:-${PROJECT_SLUG}.local}"
+fi
 MARKER="# dannify-local-domain:${PROJECT_SLUG}"
 
 if [[ ! "$PROJECT_SLUG" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$ ]]; then
@@ -21,8 +26,8 @@ if [[ ! "$PROJECT_SLUG" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$ ]]; then
 	exit 1
 fi
 
-if [[ ! "$DOMAIN" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?\.test$ ]]; then
-	printf 'error: local domain must be a valid .test hostname: %s\n' "$DOMAIN" >&2
+if [[ ! "$DOMAIN" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?\.(local|test)$ ]]; then
+	printf 'error: local domain must be a valid .local or .test hostname: %s\n' "$DOMAIN" >&2
 	exit 1
 fi
 
