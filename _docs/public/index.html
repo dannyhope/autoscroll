@@ -139,7 +139,7 @@
   <main>
     <section class="panel status-card" data-status="Shareable" id="status">
       <p class="label">Shareable</p>
-      <p>Sendable page and store hop exist. Deploy dannyhope.co.uk if the live site is behind, then paste https://dannyhope.co.uk/autoscroll/ to people you know. Remaining ticks (send it, optional blog) are not required before you send the link.</p>
+      <p>The share page and store link are ready. Deploy dannyhope.co.uk if needed, then send https://dannyhope.co.uk/autoscroll/ to people you know. The remaining ticks are optional.</p>
     </section>
 
     <section class="panel" id="share">
@@ -149,29 +149,29 @@
       <div class="step substep" data-step="website-writeup" data-verified="true">
         <div class="step-head">
           <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
-          <h3>Sendable page on dannyhope.co.uk</h3>
+          <h3>Check the public page is ready to send</h3>
         </div>
         <p class="where">In the dannyhope.co.uk site repo: <code>_data/projects.json</code> (name + real description) and a real page at <code>/{slug}/</code> — not only a hop, and not privacy-policy-only.</p>
-        <p class="form-hint">This is the URL you paste to people you know. It must say what it is, how to try it, and how to send feedback or bugs. Model: <code>autoscroll/index.html</code>. A hop is a one-line meta-refresh — that is not this page.</p>
+        <p class="form-hint">Open the page and check that it explains what Autoscroll does, how to try it, and how to report a problem. This is the page you will send to people.</p>
       </div>
 
       <!-- TASK: feedback-hop — omit if not user-facing -->
       <div class="step substep" data-step="feedback-hop" data-verified="true">
         <div class="step-head">
           <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
-          <h3>Feedback hop on the sendable page</h3>
+          <h3>Check people can report a problem</h3>
         </div>
-        <p class="where">User-facing apps: public feedback href is <a href="https://dannyhope.co.uk/feedback">https://dannyhope.co.uk/feedback</a> — on the sendable page, not only in the README.</p>
+        <p class="where">Open <a href="https://dannyhope.co.uk/feedback">https://dannyhope.co.uk/feedback</a> from the public page. The feedback link must be on that page, not only in the README.</p>
       </div>
 
       <!-- TASK: send-to-people -->
       <div class="step substep" data-step="send-to-people">
         <div class="step-head">
           <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
-          <h3>Send the page to people you know</h3>
+          <h3>Send the public page to a few people</h3>
         </div>
         <p class="where">Your messages — paste <code>https://dannyhope.co.uk/autoscroll/</code> (live after dannyhope.co.uk is deployed).</p>
-        <p class="form-hint">This is the step that closes the loop. A handful of people is enough. You do not need the store or GitHub to be Public first.</p>
+        <p class="form-hint">Send the link to a few people. You do not need to make the Chrome Web Store listing or GitHub repository public first.</p>
       </div>
     </section>
 
@@ -183,17 +183,17 @@
       <div class="step substep" data-step="stable-hop" data-verified="true">
         <div class="step-head">
           <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
-          <h3>Stable hop for public third-party hrefs</h3>
+          <h3>Check public links use our permanent links</h3>
         </div>
         <p class="where">Write-up is <code>/autoscroll/</code>. GitHub hop: <code>/autoscroll/source/</code>. Store hop: <code>/autoscroll/store/</code>.</p>
-        <p class="form-hint">A hop is a redirect, not a write-up.</p>
+        <p class="form-hint">These links can keep working if the destination changes. A hop is a redirect, not the public page itself.</p>
       </div>
 
       <!-- TASK: attribution -->
       <div class="step substep" data-step="attribution" data-verified="true">
         <div class="step-head">
           <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
-          <h3>Attribution “A Danny Hope {kind}”</h3>
+          <h3>Check the credit says who made it</h3>
         </div>
         <p class="where">In-app footer, popup, or README — link to <a href="https://dannyhope.co.uk">https://dannyhope.co.uk</a> (never dannyhope.com).</p>
       </div>
@@ -202,19 +202,19 @@
       <div class="step substep" data-step="github-visibility" data-verified="true">
         <div class="step-head">
           <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
-          <h3>GitHub visibility</h3>
+          <h3>Check whether the GitHub repository is private</h3>
         </div>
         <p class="where">GitHub repo Settings, or <code>gh repo view --json isPrivate,url,visibility</code>. A folder name containing <code>(private)</code> is a strong private signal.</p>
-        <p class="form-hint">Do not switch a private repo to public unless Danny asks.</p>
+        <p class="form-hint">If it is private, leave it private unless Danny has asked you to make it public.</p>
       </div>
 
       <!-- TASK: readme-purpose — omit if there will be no public repo -->
       <div class="step substep" data-step="readme-purpose" data-verified="true">
         <div class="step-head">
           <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
-          <h3>README purpose</h3>
+          <h3>Check the README explains the project</h3>
         </div>
-        <p class="where">This repo’s README — purpose before install or usage, on a public repo.</p>
+        <p class="where">Open this repository’s README. The first thing readers should see is what Autoscroll is for.</p>
       </div>
     </section>
 
@@ -224,17 +224,17 @@
       <div class="step substep" data-step="store-listing-helper" data-verified="true">
         <div class="step-head">
           <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
-          <h3>Store listing helper is ready / listing submitted</h3>
+        <h3>Open the Chrome Web Store checklist</h3>
         </div>
         <p class="where">This repo: <code>publish/index.html</code> (Chrome Web Store helper). Do the store tasks there — do not duplicate them here.</p>
       </div>
       <div class="step substep" data-step="store-hop" data-verified="true">
         <div class="step-head">
           <label class="done-toggle"><input type="checkbox" data-done aria-label="Done"></label>
-          <h3>Store hop with the listing URL</h3>
+          <h3>Check the public Chrome Web Store link</h3>
         </div>
         <p class="where">dannyhope.co.uk site repo: <code>autoscroll/store/index.html</code> (hops skill). Public “Add to Chrome” links use <code>https://dannyhope.co.uk/autoscroll/store/</code>, not chromewebstore.google.com.</p>
-        <p class="form-hint">Unlisted is fine. You still need the item URL in the hop so testers have one install button.</p>
+        <p class="form-hint">The listing can stay Unlisted. The link should take testers to the correct install page.</p>
       </div>
     </section>
 
