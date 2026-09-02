@@ -1,17 +1,17 @@
 [
 	{
 		"id": "task-1",
-		"instruction": "Find where you would change your settings.",
-		"context": "Starting from the home screen"
+		"instruction": "Show me where you would change the extension’s settings.",
+		"context": "There is no settings page in this version. Start from the extension’s main screen."
 	},
 	{
 		"id": "task-2",
-		"instruction": "What do you think will happen if you click the primary action button?",
+		"instruction": "What do you expect to happen when you click the Autoscroll toolbar icon?",
 		"context": null
 	},
 	{
 		"id": "task-3",
-		"instruction": "How would you share this page with a colleague?",
+		"instruction": "Show me how you would send this extension to a colleague.",
 		"context": null
 	}
 ]
