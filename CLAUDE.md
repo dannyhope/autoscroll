@@ -55,6 +55,15 @@ Do not auto-upload to the Chrome Web Store.
 
 British English in user-facing words (listing, tooltip, any future UI).
 
+## Local development
+
+This repository does not run a local HTTP server: it is a load-unpacked Chrome
+extension, not a website. Therefore live reload, `.dev-port`, startup checks,
+and a Bombay port-80 route are not applicable. `.local-domain` is retained as
+`autoscroll.local` for shared tooling; run `scripts/ensure-local-domain.sh` if
+you need its loopback hosts entry.
+
 ## What this repo does not have
 
-No local web server, so no `.dev-port`. Not a public website of its own (privacy policy is hosted on dannyhope.co.uk).
+No local web server. Not a public website of its own (privacy policy is hosted
+on dannyhope.co.uk).

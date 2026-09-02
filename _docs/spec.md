@@ -75,6 +75,15 @@ Manifest V2 used `tabs` plus `http://*/*` and `https://*/*`. Those are **not** i
 
 ---
 
+## Local development
+
+Autoscroll is a load-unpacked Chrome extension and does not run a local HTTP
+server. Consequently `.dev-port`, a live-reload workflow, and a Bombay proxy
+route are not applicable. `.local-domain` is retained as the stable project
+hostname for shared tooling; `scripts/ensure-local-domain.sh` can maintain its
+loopback hosts entry, but there is no page for `http://autoscroll.local/` to
+serve.
+
 ## Related docs
 
 | Doc | Role |
