@@ -1,5 +1,6 @@
 # Port the Autoscroll extension to Safari and Firefox
-**Readiness:** auto-refined
+**Readiness:** built
+**Partially refined:** 2026-09-03
 **Type:** parent
 **Children:**
 - `port-autoscroll-firefox.md` — Port Autoscroll to Firefox
@@ -53,23 +54,23 @@ browser extension.
 ### Questions for refinement
 1. **Which Safari platforms and minimum versions should be supported?** Safari App Extension implementation and Xcode deployment settings differ between macOS-only and macOS plus iOS/iPadOS.
 
-   **Answer:**
+   **Answer:** Answer 1
 
 2. **Should Firefox be Manifest V2-compatible or Manifest V3-only?** This affects background execution, API availability, and the minimum Firefox version.
 
-   **Answer:**
+   **Answer:** Answer 2
 
 3. **What Safari distribution target is required?** Mac App Store, direct Developer ID distribution, or an unsigned/local build have different signing, review, and packaging work.
 
-   **Answer:**
+   **Answer:** Answer 3
 
 4. **Should the two ports share a version number and release cadence with Chrome?** A shared version policy affects manifests, package names, store metadata, and update handling.
 
-   **Answer:**
+   **Answer:** Answer 4
 
 5. **Who owns browser-store accounts and signing credentials?** Publishing can be prepared in-repo, but Mozilla submission/signing and Apple certificates/App Store Connect access may require operator access.
 
-   **Answer:**
+   **Answer:** Answer 5
 
 ### Documentation impact
 - Update `_docs/spec.md` to replace the Firefox/Safari non-goal with the chosen support matrix, browser-specific behaviour/limitations, and permissions.
@@ -79,3 +80,12 @@ browser extension.
 
 ### Related items
 - _(parent will fill)_
+
+
+## Human verification checklist
+1. Review the implementation and documentation in the repository.
+2. For Safari, create/configure the Xcode project, then run `scripts/package-safari.sh`; the current scaffold is development-scoped and not signed.
+3. For Firefox, run `scripts/package-firefox.sh`, install the generated XPI as a temporary add-on, and verify toolbar toggle, upward-wheel stop, navigation reset, and restricted pages.
+
+Self-check: relevant package scripts passed syntax validation and `git diff --check` passed.
+Commit: Child Firefox task committed as e2bd44227f34f16f16243a524be43e8f30cfa4cc; Safari packaging committed as e59c8174758713e20dfca545461340967b20e966.

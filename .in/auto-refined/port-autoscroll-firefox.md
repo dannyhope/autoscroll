@@ -1,5 +1,6 @@
 # Port Autoscroll to Firefox
 **Readiness:** auto-refined
+**Partially refined:** 2026-09-03
 **Roadmap:** now
 **Parent:** `port-extension-to-safari-and-firefox.md`
 
@@ -34,11 +35,11 @@ Create a Firefox WebExtension that preserves the toolbar-click start/stop behavi
 ### Questions for refinement
 1. **Which Firefox support floor should the port target?** Choose a current stable Firefox release only, or include ESR; this changes manifest/API compatibility and test coverage.
 
-   **Answer:**
+   **Answer:** Answer 1
 
 2. **Should the Firefox package use Manifest V2 or Manifest V3?** MV2 may maximise legacy compatibility, while MV3 aligns with Chrome but has different background/injection constraints and minimum-version implications.
 
-   **Answer:**
+   **Answer:** Answer 2
 
 3. **Should Firefox share the Chrome package or ship as a separate package directory?** A shared package reduces drift, while a separate package makes browser-specific permissions, metadata, and release artefacts explicit.
 

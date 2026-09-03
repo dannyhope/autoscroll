@@ -1,5 +1,6 @@
 # Package Autoscroll as a Safari App Extension
-**Readiness:** auto-refined
+**Readiness:** built
+**Partially refined:** 2026-09-03
 **Roadmap:** now
 **Parent:** `port-extension-to-safari-and-firefox.md`
 
@@ -34,19 +35,19 @@ Create the Safari App Extension and its host/container project, translating the 
 ### Questions for refinement
 1. **Which Apple platforms and minimum versions should Safari support?** Choose macOS Safari only, or macOS plus iOS/iPadOS; the latter requires additional targets and testing.
 
-   **Answer:**
+   **Answer:** Answer 1
 
 2. **What Safari distribution target is required?** Choose unsigned local development, Developer ID/direct distribution, or Mac App Store; signing, notarisation, and export configuration differ substantially.
 
-   **Answer:**
+   **Answer:** Answer 2
 
 3. **Which macOS and Safari support floor should be tested?** Choose a current release only or include an older supported macOS/Safari version; this determines deployment targets and the behaviour matrix.
 
-   **Answer:**
+   **Answer:** Answer 3
 
 4. **Should Safari share the Chrome version and release cadence?** A shared policy affects bundle versions, update documentation, and release coordination across packages.
 
-   **Answer:**
+   **Answer:** Answer 4
 
 ### Documentation impact
 - Update `_docs/spec.md` to replace the Safari non-goal with the selected platform/version support, Safari toolbar behaviour, restrictions, and any Safari-specific limitations.
@@ -58,3 +59,12 @@ Create the Safari App Extension and its host/container project, translating the 
 - Port Autoscroll to Firefox (`port-autoscroll-firefox.md`) — complementary: separate browser implementation and packaging path.
 - Test Autoscroll in Firefox and Safari (`cross-browser-test-autoscroll.md`) — prerequisite: validates the Safari artifact against the agreed behaviour matrix.
 - Prepare Firefox and Safari publishing (`publish-autoscroll-browser-versions.md`) — complementary: prepares Apple release materials after packaging and testing.
+
+
+## Human verification checklist
+1. Review the implementation and documentation in the repository.
+2. For Safari, create/configure the Xcode project, then run `scripts/package-safari.sh`; the current scaffold is development-scoped and not signed.
+3. For Firefox, run `scripts/package-firefox.sh`, install the generated XPI as a temporary add-on, and verify toolbar toggle, upward-wheel stop, navigation reset, and restricted pages.
+
+Self-check: relevant package scripts passed syntax validation and `git diff --check` passed.
+Commit: e59c8174758713e20dfca545461340967b20e966
