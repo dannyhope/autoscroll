@@ -8,7 +8,7 @@
 
 ## Visual intent
 
-Quiet utility. The host page stays the interface. Autoscroll adds a toolbar icon in Chrome or Firefox and otherwise stays out of the way — no overlay, no popup, no landing-page chrome on the page.
+Quiet utility. The host page stays the interface. Autoscroll adds a toolbar icon in Chrome, Firefox, or macOS Safari and otherwise stays out of the way — no overlay, no popup, no landing-page chrome on the page.
 
 Start muted: a mid-grey glyph on a transparent toolbar. Do not add a status HUD or branded panel on the page.
 
@@ -35,6 +35,10 @@ Two identical downward arrows, side by side. The glyph *is* the icon — no squa
 Toolbar tooltip: **Autoscroll**.
 
 The Firefox package reuses the same RGBA toolbar icons and visual treatment as Chrome. Browser-specific toolbar rendering remains the responsibility of the browser; no in-page fallback control is added.
+
+The Safari App Extension uses the same two-arrow icon and the browser’s native
+toolbar item. Safari-specific extension settings and website-access prompts are
+browser chrome, not part of Autoscroll’s product UI.
 
 ---
 

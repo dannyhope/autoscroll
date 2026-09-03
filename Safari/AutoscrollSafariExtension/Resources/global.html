@@ -1,0 +1,9 @@
+<!doctype html>
+<meta charset="utf-8">
+<script>
+  safari.self.addEventListener("message", event => {
+    if (event.name === "autoscroll.toggle") {
+      window.postMessage({ type: "autoscroll.toggle" }, "*");
+    }
+  });
+</script>

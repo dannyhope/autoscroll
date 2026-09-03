@@ -8,7 +8,7 @@
 
 ## Purpose
 
-Autoscroll is a browser extension for Chrome and Firefox that scrolls the current page toward the bottom so you can read or scan a long page without holding the scroll wheel. Click the toolbar icon to start; scroll up or click again to stop.
+Autoscroll is a browser extension for Chrome, Firefox, and Safari on macOS that scrolls the current page toward the bottom so you can read or scan a long page without holding the scroll wheel. Click the toolbar icon to start; scroll up or click again to stop.
 
 ---
 
@@ -18,6 +18,7 @@ Autoscroll is a browser extension for Chrome and Firefox that scrolls the curren
 |---------|------|
 | Toolbar button (`action`) | The only control. Click starts or stops scrolling on the active tab. No popup. |
 | Injected scroller (`bookmarklet.js`) | Runs in the page after a toolbar click. Moves the viewport down until stopped. |
+| Safari App Extension toolbar item | The Safari equivalent of the toolbar button; it sends a message to the page script. |
 
 There is no options page, side panel, or on-page overlay.
 
@@ -71,13 +72,19 @@ Manifest V2 used `tabs` plus `http://*/*` and `https://*/*`. Those are **not** i
 
 ---
 
+### Safari support
+
+- macOS Safari only, with a macOS 13.0 deployment floor and the current Xcode SDK.
+- The local development package is an Xcode containing app plus Safari App Extension. It is not signed for Developer ID or the Mac App Store.
+- Safari website access must be granted by the user. Safari-restricted pages and non-HTML viewers may reject injection.
+- Safari packaging is reproducible through `scripts/package-safari.sh` once `Safari/AutoscrollSafari.xcodeproj` has been created in Xcode. The script builds a Debug app with signing disabled and archives it to `publish/autoscroll-safari-development.zip`; it never uploads.
+
 ## Non-goals
 
 - Configurable speed, pause, or reverse.
 - A popup, options page, or on-page HUD.
 - Windows-style middle-click autoscroll.
 - Starting on every tab without a click.
-- Safari port.
 - Guaranteed behaviour on PDFs or other non-HTML viewers.
 
 ---
