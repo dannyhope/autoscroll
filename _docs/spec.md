@@ -8,7 +8,7 @@
 
 ## Purpose
 
-Autoscroll is a browser extension for Chrome, Firefox, and Safari on macOS that scrolls the current page toward the bottom so you can read or scan a long page without holding the scroll wheel. Click the toolbar icon to start; scroll up or click again to stop.
+Autoscroll is a browser extension for Chrome, Firefox, and Safari on macOS that scrolls the current page toward the bottom so you can read or scan a long page without holding the scroll wheel. Click the toolbar icon to start; scroll up or click again to stop. Cross-browser support is only considered verified for a browser/package combination after the manual real-browser matrix in [`cross-browser-test-matrix.md`](./cross-browser-test-matrix.md) has been completed.
 
 ---
 
@@ -79,6 +79,7 @@ Manifest V2 used `tabs` plus `http://*/*` and `https://*/*`. Those are **not** i
 - The local development package is an Xcode containing app plus Safari App Extension. It is not signed for Developer ID or the Mac App Store.
 - Safari website access must be granted by the user. Safari-restricted pages and non-HTML viewers may reject injection.
 - Safari packaging is reproducible through `scripts/package-safari.sh` once `Safari/AutoscrollSafari.xcodeproj` has been created in Xcode. The script builds a Debug app with signing disabled and archives it to `publish/autoscroll-safari-development.zip`; it never uploads.
+- Safari runtime parity and installation are not currently verified; the repository does not yet contain the Xcode project required to build the local package.
 
 ## Non-goals
 
