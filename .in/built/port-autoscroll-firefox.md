@@ -1,8 +1,17 @@
 # Port Autoscroll to Firefox
-**Readiness:** auto-refined
+**Readiness:** refined
 **Partially refined:** 2026-09-03
 **Roadmap:** now
 **Parent:** `port-extension-to-safari-and-firefox.md`
+
+## Human verification checklist
+
+- **Install the Firefox package**
+  Open `publish/autoscroll-firefox.xpi` in Firefox 128+ and confirm the extension installs or is accepted for temporary development use.
+- **Try the toolbar behaviour**
+  Open a long HTML page, click the toolbar icon to start, click again to stop, and scroll up to stop. Confirm the package behaves as documented.
+
+Self-check: Firefox package build, manifest validation, archive integrity, JavaScript syntax checks, and `git diff --check` passed.
 
 Create a Firefox WebExtension that preserves the toolbar-click start/stop behaviour and upward-wheel stop behaviour of the Chrome implementation. Resolve Manifest/API and permission differences, package a reproducible development/release add-on, and document the supported Firefox version and publishing prerequisites.
 
@@ -43,7 +52,7 @@ Create a Firefox WebExtension that preserves the toolbar-click start/stop behavi
 
 3. **Should Firefox share the Chrome package or ship as a separate package directory?** A shared package reduces drift, while a separate package makes browser-specific permissions, metadata, and release artefacts explicit.
 
-   **Answer:**
+   **Answer:** shared
 
 ### Documentation impact
 - Update `_docs/spec.md` to replace the Firefox non-goal and document the supported Firefox release/ESR floor, toolbar behaviour, restricted-page limitation, and permission model.

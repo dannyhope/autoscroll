@@ -1,7 +1,17 @@
 # Test Autoscroll in Firefox and Safari
-**Readiness:** auto-refined
+**Readiness:** refined
+**Partially refined:** 2026-09-03
 **Roadmap:** now
 **Parent:** `port-extension-to-safari-and-firefox.md`
+
+## Human verification checklist
+
+- **Run the Firefox matrix**
+  Follow the protocol in [`_docs/cross-browser-test-matrix.md`](../../_docs/cross-browser-test-matrix.md) with the generated Firefox package and record the result of each row.
+- **Complete Safari setup before testing**
+  Build/install the Safari package once its Xcode project exists, then record the Safari rows and any platform-specific limitations.
+
+No UI screenshot — this is a manual browser validation and documentation task.
 
 Define and execute a cross-browser test matrix for installation and runtime behaviour: toolbar click starts scrolling, a second click stops, upward wheel input stops, downward input does not, navigation resets the page state, and unsupported/restricted pages fail safely. Record browser versions, package versions, and any behavioural differences.
 
@@ -35,15 +45,15 @@ Define and execute a cross-browser test matrix for installation and runtime beha
 ### Questions for refinement
 1. **Which Firefox and Safari delivery targets should be supported?** Options include Firefox desktop WebExtension plus Safari Web Extension Converter/ Safari App Extension packaging; specify minimum browser and macOS versions.
 
-   **Answer:**
+   **Answer:** most recent versions of macOS, firefox and safari. i dont know what the different kinds of extension are, make an educated guess
 
 2. **Is cross-browser parity required before this test task is complete?** Choose full parity for all matrix rows, or allow documented platform-specific deviations where APIs or restricted-page rules differ.
 
-   **Answer:**
+   **Answer:** yes
 
 3. **What evidence format and runtime coverage should be accepted?** For example, a checked-in Markdown matrix with browser versions and logs, plus manual real-browser runs, versus automated WebDriver/Web Extension tests supplemented by manual installation checks.
 
-   **Answer:**
+   **Answer:** manual real browser runs
 
 ### Documentation impact
 - Update `_docs/spec.md` to replace the current Firefox/Safari non-goal with the agreed support boundary and browser-specific limitations.
