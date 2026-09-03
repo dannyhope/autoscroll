@@ -1,6 +1,6 @@
 # Autoscroll
 
-Chrome extension that scrolls the current page toward the bottom. Click the toolbar icon to start; scroll up or click again to stop.
+Browser extension for Chrome and Firefox that scrolls the current page toward the bottom. Click the toolbar icon to start; scroll up or click again to stop.
 
 **Install from the [Chrome Web Store](https://dannyhope.co.uk/autoscroll/store/)** · [Product page](https://dannyhope.co.uk/autoscroll/) · [Source](https://dannyhope.co.uk/autoscroll/source/)
 
@@ -20,6 +20,14 @@ It only affects the tab you click on. It does not run on `chrome://` pages or th
 4. Open a long web page and click the Autoscroll icon in the toolbar
 
 Reload the extension on `chrome://extensions` after you change the scripts.
+
+## Firefox (local development)
+
+The Firefox package is a separate Manifest V3 package. It supports Firefox 128 and newer, including ESR releases based on 128 or newer.
+
+Run `./scripts/package-firefox.sh` to create the unsigned `publish/autoscroll-firefox.xpi`. In Firefox, open `about:debugging`, choose **This Firefox**, select **Load Temporary Add-on**, and choose the package's `Firefox/manifest.json` (or the generated XPI). Temporary add-ons are removed when Firefox restarts.
+
+Firefox Add-ons signing and submission are not automated here.
 
 ## Chrome Web Store publish
 

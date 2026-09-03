@@ -1,5 +1,7 @@
 # Chrome Web Store listing — paste these fields
 
+The Firefox package is documented in `README.md`; Mozilla Add-ons metadata and signing are handled by the publishing task.
+
 Aligned with the **Store listing** form in the Developer Dashboard.
 British English throughout. Visibility starts **Unlisted**.
 

@@ -1,0 +1,31 @@
+{
+	"manifest_version": 3,
+	"name": "Autoscroll",
+	"version": "0.3",
+	"description": "Scroll to the bottom of the page. Click the toolbar icon; scroll up to stop.",
+	"author": "Danny Hope",
+	"homepage_url": "https://dannyhope.co.uk",
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "autoscroll@dannyhope.co.uk",
+			"strict_min_version": "128.0"
+		}
+	},
+	"action": {
+		"default_title": "Autoscroll",
+		"default_icon": {
+			"16": "icon-16.png",
+			"48": "icon-48.png",
+			"128": "icon-128.png"
+		}
+	},
+	"background": {
+		"scripts": ["background.js"]
+	},
+	"icons": {
+		"16": "icon-16.png",
+		"48": "icon-48.png",
+		"128": "icon-128.png"
+	},
+	"permissions": ["activeTab", "scripting"]
+}
