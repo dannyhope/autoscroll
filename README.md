@@ -36,7 +36,7 @@ npm run dev:firefox
 
 Then load the extension:
 - **Chrome:** Open `chrome://extensions/`, enable Developer mode, and Load unpacked → `.output/chrome-mv3`
-- **Firefox:** Open `about:debugging`, This Firefox, Load Temporary Add-on → `.output/firefox-mv2/manifest.json`
+- **Firefox:** Open `about:debugging`, This Firefox, Load Temporary Add-on → `.output/firefox-mv3/manifest.json`
 
 ### Production build
 
@@ -52,7 +52,7 @@ npm run build:firefox
 
 Output directories:
 - Chrome: `.output/chrome-mv3/` (Manifest V3)
-- Firefox: `.output/firefox-mv2/` (Manifest V2, supports Firefox 128+)
+- Firefox: `.output/firefox-mv3/` (Manifest V3, supports Firefox 128+)
 
 ### Package for distribution
 

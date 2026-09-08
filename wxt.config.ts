@@ -19,4 +19,8 @@ export default defineConfig({
       },
     }),
   }),
+  runner: {
+    disabled: true,
+  },
+  manifestVersion: 3,
 });

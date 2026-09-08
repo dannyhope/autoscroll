@@ -55,10 +55,10 @@ There is no options page, side panel, or on-page overlay.
 
 ### Firefox support
 
-- Built as Manifest V2 for Firefox (WXT default for maximum compatibility)
+- Built as Manifest V3 for Firefox
 - Supported floor: Firefox 128 or newer, including Firefox ESR releases based on 128 or newer
 - Firefox uses native `browser.*` APIs; the page-scoped interval remains in the injected script
-- Build with `npm run build:firefox`; output in `.output/firefox-mv2/`
+- Build with `npm run build:firefox`; output in `.output/firefox-mv3/`
 - Firefox Add-ons signing and submission are publishing work, not performed by this repository
 - Manual cross-browser evidence is recorded in [`cross-browser-test-matrix.md`](./cross-browser-test-matrix.md)
 
@@ -78,7 +78,7 @@ There is no options page, side panel, or on-page overlay.
 | `activeTab` | Access only the tab the user just clicked the icon on. |
 | `scripting` | Inject the scroller script into that tab. |
 
-Chrome uses Manifest V3 (`.output/chrome-mv3/`). Firefox uses Manifest V2 (`.output/firefox-mv2/`) for maximum compatibility. Both require only `activeTab` + `scripting`; no broad host permissions needed. Package version **0.4.0**.
+Both Chrome and Firefox use Manifest V3 (`.output/chrome-mv3/` and `.output/firefox-mv3/`). Both require only `activeTab` + `scripting`; no broad host permissions needed. Package version **0.4.0**.
 
 ---
 
