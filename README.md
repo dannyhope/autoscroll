@@ -12,22 +12,56 @@ Browser extension for Chrome and Firefox that scrolls the current page toward th
 
 It only affects the tab you click on. It does not run on `chrome://` pages or the Chrome Web Store.
 
-## Load unpacked (local)
+## Development
 
-1. Open `chrome://extensions/`
-2. Turn on **Developer mode**
-3. **Load unpacked** → select the `Autoscroll` folder (the one that contains `manifest.json`)
-4. Open a long web page and click the Autoscroll icon in the toolbar
+This extension is built with [WXT](https://wxt.dev/) and TypeScript.
 
-Reload the extension on `chrome://extensions` after you change the scripts.
+### First-time setup
 
-## Firefox (local development)
+```bash
+npm install
+```
 
-The Firefox package is a separate Manifest V3 package. It supports Firefox 128 and newer, including ESR releases based on 128 or newer.
+### Development mode (live reload)
 
-Run `./scripts/package-firefox.sh` to create the unsigned `publish/autoscroll-firefox.xpi`. In Firefox, open `about:debugging`, choose **This Firefox**, select **Load Temporary Add-on**, and choose the package's `Firefox/manifest.json` (or the generated XPI). Temporary add-ons are removed when Firefox restarts.
+**Chrome:**
+```bash
+npm run dev
+```
 
-Firefox Add-ons signing and submission are not automated here.
+**Firefox:**
+```bash
+npm run dev:firefox
+```
+
+Then load the extension:
+- **Chrome:** Open `chrome://extensions/`, enable Developer mode, and Load unpacked → `.output/chrome-mv3`
+- **Firefox:** Open `about:debugging`, This Firefox, Load Temporary Add-on → `.output/firefox-mv3/manifest.json`
+
+### Production build
+
+**Chrome:**
+```bash
+npm run build
+```
+
+**Firefox:**
+```bash
+npm run build:firefox
+```
+
+Output directories:
+- Chrome: `.output/chrome-mv3/` (Manifest V3)
+- Firefox: `.output/firefox-mv3/` (Manifest V3, supports Firefox 128+)
+
+### Package for distribution
+
+```bash
+npm run zip          # Chrome
+npm run zip:firefox  # Firefox
+```
+
+Creates zip files in `.output/` ready for store submission.
 
 ## Chrome Web Store publish
 
