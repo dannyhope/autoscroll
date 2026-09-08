@@ -15,39 +15,45 @@
 <body>
   <div class="page">
     <h1>Dannify status — Autoscroll</h1>
-    <p class="meta">Living audit. Regenerated whenever <code>/dannify</code> runs. Last updated: 2026-08-28.</p>
+    <p class="meta">Living audit. Regenerated whenever <code>/dannify</code> runs. Last updated: 2026-09-07.</p>
     <p class="hint">What still needs doing, then what’s already up to spec. Product truth is <code>_docs/spec.md</code> and <code>_docs/design.md</code>. Current KPI is <code>_docs/now.md</code>.</p>
-    <p class="hint"><strong>Detected:</strong> vanilla Chrome extension (toolbar click injects <code>bookmarklet.js</code>). Keep this stack — do not migrate to Plasmo. No popup, options, or side panel.</p>
+    <p class="hint"><strong>Detected:</strong> vanilla Manifest V3 browser extension with Chrome, Firefox, and planned Safari surfaces. Keep this stack — do not migrate to Plasmo. Chrome has no popup, options, or side panel.</p>
 
     <section class="panel">
       <h2>Improvements</h2>
       <h3>Must</h3>
       <ul>
-        <li>Add the managed <code>autoscroll.test</code> local-domain script and mapping; this repo has no server, but every repo must have the stable hostname.</li>
+        <li>None.</li>
       </ul>
       <h3>Should</h3>
       <ul>
-        <li>Add <code>_docs/now.md</code> — current KPI (not the purpose). Set with <code>/goal</code>; do not invent one.</li>
-        <li>State an accessibility level in <code>_docs/spec.md</code> (honest “none / no thought given” is fine).</li>
-        <li><code>publish/index.html</code> needs sibling <code>operator.css</code> from the template; remove its ad-hoc palette.</li>
-        <li><code>usability-test.html</code> needs sibling <code>operator.css</code> (or a link to <code>_docs/operator.css</code>); remove its ad-hoc palette.</li>
+        <li><code>_docs/now.md</code> is missing — choose a current KPI and parent goal, then set it with <code>/goal</code>; do not invent one.</li>
+        <li>State an accessibility level in <code>_docs/spec.md</code> (an honest “none / no thought given” is acceptable).</li>
+        <li><code>publish/index.html</code> has an ad-hoc operator palette; use the shared <code>operator.css</code> while preserving its checklist behaviour.</li>
+        <li><code>usability-test.html</code> has an ad-hoc operator palette; use the shared <code>operator.css</code>.</li>
+        <li>Run the applicable connected checkers and record their results under <code>_docs/checks/</code>: product, usability, evidence, design-system, accessibility, security, and deployment.</li>
+      </ul>
+      <h3>Nice</h3>
+      <ul>
+        <li>None.</li>
       </ul>
     </section>
 
     <section class="panel">
       <h2>Already right</h2>
       <ul>
-        <li><code>_docs/spec.md</code> covers purpose, toolbar + injected scroller, permissions, privacy, and non-goals</li>
+        <li><code>_docs/spec.md</code> covers purpose, Chrome/Firefox/Safari surfaces, behaviour, permissions, privacy, and non-goals</li>
         <li><code>_docs/design.md</code> covers toolbar icon, no on-page UI, British English, store visuals</li>
-        <li>README has purpose before install/usage; load-unpacked steps in README and <code>CLAUDE.md</code></li>
+        <li>README has purpose before install/usage; Chrome and Firefox local-install steps are documented in README and <code>CLAUDE.md</code></li>
         <li>Attribution “A Danny Hope product” → https://dannyhope.co.uk in README and privacy policy (no popup for a footer)</li>
         <li>Public links use dannyhope.co.uk hops (store, source, feedback, bookmarklet tool)</li>
-        <li>Manifest V3 package (<code>activeTab</code> + <code>scripting</code>); vanilla stack kept</li>
+        <li>Chrome and Firefox packages use Manifest V3 (<code>activeTab</code> + <code>scripting</code>); vanilla stack kept</li>
         <li><code>publish/</code> pack present (<code>index.html</code>, listing, zip, assets)</li>
         <li><code>.in/</code> inbox, <code>_vibing/</code>, <code>.gitignore</code> (<code>_vibing/</code>, <code>.DS_Store</code>)</li>
-        <li><code>autoscroll.code-workspace</code>, Bombay <code>projects.json</code> entry, usability scaffold files</li>
+        <li><code>autoscroll.code-workspace</code>, Bombay <code>projects.json</code> entry, and usability scaffold files</li>
         <li>Toolbar icons mid-grey glyph on transparent; British English in listing copy</li>
-        <li>Sitemap / dev-port / Prototype Panels / Rebuild desktop skipped (not applicable); no local start command exists</li>
+        <li><code>.local-domain</code> and its validation/maintenance scripts exist; local server, dev-port, sitemap, Prototype Panels, and Rebuild desktop are not applicable</li>
+        <li>Safari packaging is documented as pending the Xcode project; no automatic upload is configured</li>
       </ul>
     </section>
   </div>
