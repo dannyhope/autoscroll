@@ -4,6 +4,10 @@ Browser extension for Chrome and Firefox that scrolls the current page toward th
 
 **Install from the [Chrome Web Store](https://dannyhope.co.uk/autoscroll/store/)** · [Product page](https://dannyhope.co.uk/autoscroll/) · [Source](https://dannyhope.co.uk/autoscroll/source/)
 
+## Project launcher
+
+Double-click [`Launch Autoscroll.command`](Launch%20Autoscroll.command) in Finder to open this project in Cursor, open the Chrome extensions page, and open the Safari Xcode project when it exists.
+
 ## Usage
 
 - **Click** the toolbar icon to start scrolling down.
